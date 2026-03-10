@@ -4,7 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_one :profile, dependent: :destroy
+  validates :username, presence: true, uniqueness: true
+
   has_many :videos, dependent: :destroy
   has_many :bookmarks, dependent: :destroy
   has_many :bookmarked_devices, through: :bookmarks, source: :device
