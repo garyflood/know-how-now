@@ -1,0 +1,17 @@
+{
+  "background_color": "white",
+  "description": "KnowHowNow is the ultimate universal device manual. Scan, let the AI identify the model and watch a high quality instructional video! Save it! ,
+  "display": "fullscreen",
+  "name": "KnowHowNow",
+  "icons": [
+    <% files = Dir.entries(Rails.root.join("app/assets/images/icons/")).select {|f| f.match?(/\.png$/)} %>
+    <% files.each_with_index do |file, index| %>
+      <% match = file.match(/(?<size>\d{2,3}x\d{2,3})/) %>
+      {
+        "src": "<%= image_path "icons/#{file}" %>",
+        "sizes": "<%= match && match[:size] %>",
+        "type": "image/png"
+      }<%= "," unless (files.size - 1) == index %>
+    <% end %>
+  ]
+}
