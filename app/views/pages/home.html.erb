@@ -7,8 +7,17 @@
       <%= f.input :name,
                   label: "What device do you need help with?",
                   placeholder: "e.g. Nespresso machine, iPhone 15, Microwave...",
+                  required: false,
                   input_html: { "data-quick-add-target": "nameInput", class: "form-control-lg" } %>
     </div>
+
+    <div class="text-center text-muted mb-3 fw-semibold">— or upload an image —</div>
+
+    <div class="mb-4">
+      <label for="device_image" class="form-label">Upload a photo of your device</label>
+      <input type="file" id="device_image" name="device_image" accept="image/*" class="form-control">
+    </div>
+
     <div class="form-actions">
       <%= f.button :submit, "Get AI Instructions", class: "btn ksn-btn-primary btn-lg w-100 fw-bold" %>
     </div>
