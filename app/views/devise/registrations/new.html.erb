@@ -1,25 +1,110 @@
-<h2>Sign up</h2>
+<%# Sign Up page — matches Know-How UI design %>
+<div class="auth-page">
+  <div class="auth-card">
 
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= f.error_notification %>
+    <%# Header with back arrow %>
+    <div class="auth-header">
+      <%= link_to new_user_session_path, class: "auth-back-link" do %>
+        <i class="fa-solid fa-arrow-left"></i>
+      <% end %>
+      <h1 class="auth-header-title">Create Account</h1>
+    </div>
 
-  <div class="form-inputs">
-    <%= f.input :email,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "email" }%>
-    <%= f.input :password,
-                required: true,
-                hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
-                input_html: { autocomplete: "new-password" } %>
-    <%= f.input :password_confirmation,
-                required: true,
-                input_html: { autocomplete: "new-password" } %>
+    <%# Error messages %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <%# Sign up form — multipart for file upload %>
+    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { multipart: true }) do |f| %>
+      <%= f.error_notification %>
+
+      <%# Upload Photo — clickable circle triggers hidden file input %>
+      <div class="auth-photo-upload">
+        <label for="user_photo" class="auth-photo-clickable">
+          <div class="auth-photo-circle" id="photo-preview-wrapper">
+            <img id="photo-preview" src="" alt="Preview" class="auth-photo-preview-img" style="display: none;">
+            <i class="fa-solid fa-user" id="photo-placeholder-icon"></i>
+            <span class="auth-photo-camera">
+              <i class="fa-solid fa-camera"></i>
+            </span>
+          </div>
+          <p class="auth-photo-label">Upload Photo</p>
+          <p class="auth-photo-hint">Add a profile picture</p>
+        </label>
+        <%= f.input :photo, as: :file, label: false, input_html: {
+          id: "user_photo",
+          class: "d-none",
+          accept: "image/*",
+          onchange: "previewPhoto(this)"
+        } %>
+      </div>
+
+      <div class="auth-form">
+        <%# Full Name %>
+        <div class="auth-field">
+          <label class="auth-label">Full Name</label>
+          <%= f.input :full_name,
+                      label: false,
+                      required: true,
+                      autofocus: true,
+                      placeholder: "Enter your full name",
+                      input_html: { class: "auth-input" } %>
+        </div>
+
+        <%# Username %>
+        <div class="auth-field">
+          <label class="auth-label">Username</label>
+          <%= f.input :username,
+                      label: false,
+                      required: true,
+                      placeholder: "Choose a username",
+                      input_html: { class: "auth-input" } %>
+        </div>
+
+        <%# Email %>
+        <div class="auth-field">
+          <label class="auth-label">Email</label>
+          <%= f.input :email,
+                      label: false,
+                      required: true,
+                      placeholder: "example@email.com",
+                      input_html: { autocomplete: "email", class: "auth-input" } %>
+        </div>
+
+        <%# Password %>
+        <div class="auth-field">
+          <label class="auth-label">Password</label>
+          <%= f.input :password,
+                      label: false,
+                      required: true,
+                      placeholder: "Create a strong password",
+                      hint: false,
+                      input_html: { autocomplete: "new-password", class: "auth-input" } %>
+        </div>
+
+        <%# Submit button %>
+        <%= f.button :submit, "Sign Up", class: "btn auth-btn" %>
+      </div>
+    <% end %>
+
+    <%# Login link %>
+    <p class="auth-switch">
+      Already have an account? <%= link_to "Log In", new_user_session_path, class: "auth-switch-link" %>
+    </p>
+
   </div>
+</div>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+<%# Photo preview — shows selected image in the circle before submit %>
+<script>
+  function previewPhoto(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('photo-preview').src = e.target.result;
+        document.getElementById('photo-preview').style.display = 'block';
+        document.getElementById('photo-placeholder-icon').style.display = 'none';
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>

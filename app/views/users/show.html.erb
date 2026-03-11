@@ -1,0 +1,82 @@
+<%# Profile page — matches Know-How UI design %>
+<div class="profile-page">
+
+  <%# Header: back arrow, title, settings icon %>
+  <div class="profile-header">
+    <%= link_to root_path, class: "profile-header-link" do %>
+      <i class="fa-solid fa-arrow-left"></i>
+    <% end %>
+    <h1 class="profile-header-title">Profile</h1>
+    <%= link_to edit_profile_path, class: "profile-header-link" do %>
+      <i class="fa-solid fa-gear"></i>
+    <% end %>
+  </div>
+
+  <%# Avatar & user info %>
+  <div class="profile-avatar-section">
+    <div class="profile-avatar">
+      <% if @user.picture.present? %>
+        <%= image_tag @user.picture, class: "profile-avatar-img" %>
+      <% else %>
+        <i class="fa-solid fa-user profile-avatar-placeholder"></i>
+      <% end %>
+    </div>
+    <h2 class="profile-name"><%= @user.full_name || @user.username %></h2>
+    <%# TODO: Add user role/title when that feature is built %>
+  </div>
+
+  <%# Edit Profile button %>
+  <%= link_to "Edit Profile", edit_profile_path, class: "btn profile-edit-btn" %>
+
+  <%# Stats grid — placeholder values until stats features are built %>
+  <div class="profile-stats">
+    <div class="profile-stat-card">
+      <span class="profile-stat-value"><%= @user.videos.sum(:views) rescue 0 %></span>
+      <span class="profile-stat-label">VIEWS</span>
+    </div>
+    <div class="profile-stat-card">
+      <%# TODO: Earned feature not yet implemented %>
+      <span class="profile-stat-value">$0</span>
+      <span class="profile-stat-label">EARNED</span>
+    </div>
+    <div class="profile-stat-card">
+      <span class="profile-stat-value"><%= @user.videos.count %></span>
+      <span class="profile-stat-label">VIDEOS</span>
+    </div>
+    <div class="profile-stat-card">
+      <%# TODO: Rating feature not yet implemented %>
+      <span class="profile-stat-value">0 <i class="fa-solid fa-star"></i></span>
+      <span class="profile-stat-label">RATING</span>
+    </div>
+  </div>
+
+  <%# Saved Manuals link %>
+  <%= link_to "#", class: "profile-saved-link" do %>
+    <div class="d-flex align-items-center">
+      <i class="fa-regular fa-bookmark me-2"></i>
+      <span>Saved Manuals</span>
+    </div>
+    <i class="fa-solid fa-chevron-right"></i>
+  <% end %>
+
+  <%# My Uploads section — placeholder until video upload feature is built %>
+  <div class="profile-uploads-section">
+    <div class="profile-uploads-header">
+      <h3 class="profile-uploads-title">My Uploads</h3>
+      <%# TODO: Link to full uploads list when built %>
+      <%= link_to "See all", "#", class: "profile-see-all" %>
+    </div>
+    <% if @user.videos.any? %>
+      <%# TODO: Render video cards when video display feature is built %>
+      <p class="text-muted">Video cards will appear here.</p>
+    <% else %>
+      <p class="text-muted">No uploads yet.</p>
+    <% end %>
+  </div>
+
+  <%# Sign Out %>
+  <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "btn profile-signout-btn" do %>
+    <i class="fa-solid fa-right-from-bracket me-2"></i> Sign Out
+  <% end %>
+
+</div>

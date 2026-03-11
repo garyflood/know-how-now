@@ -12,3 +12,18 @@
 <div class="mt-4">
   <%= markdown(@device.text_instructions) %>
 </div>
+
+<% if @device.related_devices.present? %>
+  <div class="mt-5">
+    <h5 class="fw-semibold">Related Devices</h5>
+    <ul class="list-unstyled mt-2">
+      <% @device.related_devices.each do |related| %>
+        <li>
+          <%= button_to related, devices_path, params: { device: { name: related } },
+                method: :post,
+                class: "btn btn-link p-0 text-decoration-none text-muted" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
