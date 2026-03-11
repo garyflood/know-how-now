@@ -1,0 +1,37 @@
+<%# Explore devices in a single category %>
+<div class="w-100">
+  <%= link_to explore_path, class: "text-muted text-decoration-none small mb-2 d-inline-block" do %>
+    <i class="fa-solid fa-arrow-left me-1"></i> Back to categories
+  <% end %>
+
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <div class="explore-category-icon">
+      <%= category_image_tag(@category, alt: @category.category_name, class: "rounded") %>
+    </div>
+    <div>
+      <h1 class="h4 mb-0"><%= @category.category_name %></h1>
+      <span class="text-muted small"><%= @devices.size %> <%= "device".pluralize(@devices.size) %></span>
+    </div>
+  </div>
+
+  <% if @devices.any? %>
+    <ul class="list-group list-group-flush">
+      <% @devices.each do |device| %>
+        <li class="list-group-item px-0">
+          <%= link_to device_path(device), class: "text-decoration-none text-dark d-flex align-items-center gap-3" do %>
+            <div class="device-list-img">
+              <%= device_image_tag(device, alt: device.name, class: "rounded") %>
+            </div>
+            <div class="flex-grow-1">
+              <span class="fw-semibold"><%= device.name %></span>
+              <span class="text-muted small ms-2"><%= device.views %> <%= "view".pluralize(device.views) %></span>
+            </div>
+            <i class="fa-solid fa-chevron-right text-muted"></i>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-muted">No devices in this category yet.</p>
+  <% end %>
+</div>
