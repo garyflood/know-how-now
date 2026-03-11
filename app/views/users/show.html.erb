@@ -7,8 +7,7 @@
       <i class="fa-solid fa-arrow-left"></i>
     <% end %>
     <h1 class="profile-header-title">Profile</h1>
-    <%# TODO: Link to settings/edit profile page when built %>
-    <%= link_to "#", class: "profile-header-link" do %>
+    <%= link_to edit_profile_path, class: "profile-header-link" do %>
       <i class="fa-solid fa-gear"></i>
     <% end %>
   </div>
@@ -27,8 +26,7 @@
   </div>
 
   <%# Edit Profile button %>
-  <%# TODO: Link to edit profile page when built %>
-  <%= link_to "Edit Profile", "#", class: "btn profile-edit-btn" %>
+  <%= link_to "Edit Profile", edit_profile_path, class: "btn profile-edit-btn" %>
 
   <%# Stats grid — placeholder values until stats features are built %>
   <div class="profile-stats">
