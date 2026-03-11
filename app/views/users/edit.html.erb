@@ -2,12 +2,11 @@
 <div class="profile-page">
 
   <%# Header %>
+  <%# Header: back arrow only %>
   <div class="profile-header">
     <%= link_to profile_path, class: "profile-header-link" do %>
       <i class="fa-solid fa-arrow-left"></i>
     <% end %>
-    <h1 class="profile-header-title">Edit Profile</h1>
-    <span class="profile-header-link"></span>
   </div>
 
   <%= form_with model: @user, url: profile_path, method: :patch, multipart: true, class: "edit-profile-form" do |f| %>
@@ -58,13 +57,13 @@
       <%= f.email_field :email, value: @user.email, placeholder: "example@email.com", class: "auth-input" %>
     </div>
 
-    <%# Save Changes button %>
-    <%= f.submit "Save Changes", class: "btn auth-btn w-100 mt-3" %>
+    <%# Save + Delete pinned to bottom via margin-top: auto %>
+    <div class="edit-profile-actions">
+      <%= f.submit "Save Changes", class: "btn auth-btn w-100" %>
+      <%= link_to "Delete Account", registration_path(:user), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete your account? This cannot be undone." }, class: "edit-profile-delete" %>
+    </div>
 
   <% end %>
-
-  <%# Delete Account — links to Devise destroy %>
-  <%= link_to "Delete Account", registration_path(:user), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete your account? This cannot be undone." }, class: "edit-profile-delete" %>
 
 </div>
 
