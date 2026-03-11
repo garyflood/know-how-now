@@ -30,5 +30,6 @@
   "Travel & Portable Gadgets",
   "Industrial & Workplace Tools"
 ].each do |name|
-  Category.find_or_create_by!(category_name: name)
+  slug = name.parameterize.gsub("-", "_")
+  Category.find_or_create_by!(category_name: name).update!(image: "#{slug}.png")
 end

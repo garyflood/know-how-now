@@ -1,3 +1,7 @@
+<div class="mb-3">
+  <%= device_image_tag(@device, class: "rounded shadow-sm w-100", alt: @device.name, style: "max-height: 200px; object-fit: cover;") %>
+</div>
+
 <div class="mb-2">
   <span class="badge bg-secondary"><%= @device.category.category_name %></span>
   <span class="text-muted ms-2"><%= @device.views %> <%= "view".pluralize(@device.views) %></span>
