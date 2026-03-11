@@ -16,8 +16,7 @@
 
     <%# Profile tab — login if not signed in, profile page if signed in %>
     <% if user_signed_in? %>
-      <%# TODO: Update path once profile routes are created %>
-      <%= link_to "#", class: "bottom-navbar-tab" do %>
+      <%= link_to profile_path, class: "bottom-navbar-tab #{current_page?(profile_path) ? 'active' : ''}" do %>
         <i class="fa-solid fa-user"></i>
         <span>PROFILE</span>
       <% end %>

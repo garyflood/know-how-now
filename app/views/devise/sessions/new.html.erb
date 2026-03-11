@@ -1,20 +1,74 @@
-<h2>Log in</h2>
+<%# Login page — matches Know-How UI design %>
+<div class="auth-page">
+  <div class="auth-card">
 
-<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="form-inputs">
-    <%= f.input :email,
-                required: false,
-                autofocus: true,
-                input_html: { autocomplete: "email" } %>
-    <%= f.input :password,
-                required: false,
-                input_html: { autocomplete: "current-password" } %>
-    <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
+    <%# Logo %>
+    <div class="auth-logo">
+      <i class="fa-solid fa-lightbulb"></i>
+      <span>Know-How</span>
+    </div>
+
+    <%# Heading %>
+    <h1 class="auth-title">Join the Know-How Community</h1>
+    <p class="auth-subtitle">Discover and share expertise with the world.</p>
+
+    <%# Tab toggle: Log In / Sign Up %>
+    <div class="auth-tabs">
+      <%= link_to "Log In", new_user_session_path, class: "auth-tab active" %>
+      <%= link_to "Sign Up", new_user_registration_path, class: "auth-tab" %>
+    </div>
+
+    <%# Login form %>
+    <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="auth-form">
+        <%# Email field %>
+        <div class="auth-field">
+          <label class="auth-label">Email</label>
+          <%= f.input :email,
+                      label: false,
+                      required: false,
+                      autofocus: true,
+                      placeholder: "name@example.com",
+                      input_html: { autocomplete: "email", class: "auth-input" } %>
+        </div>
+
+        <%# Password field with Forgot Password link %>
+        <div class="auth-field">
+          <div class="d-flex justify-content-between align-items-center">
+            <label class="auth-label">Password</label>
+            <%= link_to "Forgot Password?", new_password_path(resource_name), class: "auth-forgot-link" %>
+          </div>
+          <%= f.input :password,
+                      label: false,
+                      required: false,
+                      placeholder: "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+                      input_html: { autocomplete: "current-password", class: "auth-input" } %>
+        </div>
+
+        <%# Submit button %>
+        <%= f.button :submit, "Log In", class: "btn auth-btn" %>
+      </div>
+    <% end %>
+
+    <%# OAuth divider — visual only until OmniAuth is configured %>
+    <div class="auth-divider">
+      <span>OR CONTINUE WITH</span>
+    </div>
+
+    <%# OAuth buttons — placeholders until OmniAuth is set up %>
+    <div class="auth-oauth">
+      <button type="button" class="btn auth-oauth-btn" disabled>
+        <i class="fa-brands fa-google"></i> Google
+      </button>
+      <button type="button" class="btn auth-oauth-btn" disabled>
+        <i class="fa-brands fa-apple"></i> Apple
+      </button>
+    </div>
+
+    <%# Sign up link %>
+    <p class="auth-switch">
+      Don't have an account? <%= link_to "Sign Up", new_user_registration_path, class: "auth-switch-link" %>
+    </p>
+
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Log in" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>
