@@ -6,25 +6,46 @@ class DevicesController < ApplicationController
     @device.increment!(:views)
   end
 
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity
   def create
     @device = Device.new(device_params)
 
-    chat = RubyLLM.chat
+    existing = Device.find_by(name: @device.name)
+    if existing
+      flash[:notice] = "We already have instructions for #{existing.name}!"
+      redirect_to device_path(existing) and return
+    end
+
     category_names = Category.pluck(:category_name).join("\n")
 
-    category_name = chat.ask(
-      "Which of the following categories best describes a '#{@device.name}'? " \
-      "Reply with ONLY the category name, exactly as written:\n#{category_names}"
-    ).content.strip
+    prompt = <<~PROMPT
+      A user has entered the following device name: "#{@device.name}"
 
-    @device.category = Category.find_by(category_name: category_name) ||
+      Respond with a JSON object (no markdown, no code fences) with exactly these keys:
+      - "is_device": true if this is a real device, false if it is not
+      - "exact_model": the brand and model number only (e.g. "Toshiba EM131A5C-SS"), with no device type or description appended. If the input is a real device but no specific model is given, pick the most popular or well-known model for that brand/type as your best guess. Only null if not a device at all.
+      - "category": which of the following categories best describes it (reply with ONLY the category name exactly as written): #{category_names}
+      - "instructions": step by step instructions for how to use this device, written concisely in Markdown
+      - "related_devices": an array of 5-7 specific brand and model numbers (e.g. "Toshiba EM131A5C-SS") that the user may have been referring to instead — other real models that match their input
+    PROMPT
+
+    response = JSON.parse(RubyLLM.chat.ask(prompt).content)
+
+    raise "\"#{@device.name}\" does not appear to be a device." unless response["is_device"]
+    raise "Could not identify an exact model for \"#{@device.name}\"." if response["exact_model"].blank?
+
+    @device.name = response["exact_model"]
+
+    existing = Device.find_by(name: @device.name)
+    if existing
+      flash[:notice] = "We already have instructions for #{existing.name}!"
+      redirect_to device_path(existing) and return
+    end
+
+    @device.category = Category.find_by(category_name: response["category"]) ||
                        Category.find_by(category_name: "Personal Computers")
-
-    chat.with_instructions(
-      "You are an expert in using devices. Give step by step instructions to use a device. Answer concisely in Markdown."
-    )
-    @device.text_instructions = chat.ask("How do I use a #{@device.name}?").content
+    @device.text_instructions = response["instructions"]
+    @device.related_devices = Array(response["related_devices"])
 
     if @device.save
       flash[:notice] = "Device was successfully added with instructions!"
@@ -37,7 +58,7 @@ class DevicesController < ApplicationController
     flash.now[:alert] = "Unable to generate instructions: #{e.message}"
     render "pages/home", status: :unprocessable_entity
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
 
   private
 
