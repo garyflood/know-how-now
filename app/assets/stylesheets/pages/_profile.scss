@@ -1,10 +1,21 @@
 /* Profile page styling */
 
+/* Match background so gray area below card blends in */
+body:has(.profile-page) {
+  background: #f4f4f4;
+}
+
 .profile-page {
   width: 100%;
-  max-width: 500px;
+  max-width: 480px;
+  min-height: calc(100vh - 100px); /* fill the viewport, minus navbar */
   margin: 0 auto;
-  padding-bottom: 20px;
+  padding: 24px 24px 20px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07), 0 1px 4px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
 }
 
 /* Header: back arrow, title, settings */
@@ -241,9 +252,18 @@
   margin: 0;
 }
 
-/* Edit profile form */
+/* Edit profile form — flex column so actions push to bottom */
 .edit-profile-form {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Save + Delete pushed to bottom */
+.edit-profile-actions {
+  margin-top: auto;
+  padding-top: 24px;
 }
 
 /* Delete Account link */
@@ -260,6 +280,12 @@
     text-decoration: underline;
     color: #e53e3e;
   }
+}
+
+/* Sign Out wrapper — pushes button to bottom */
+.profile-signout-wrapper {
+  margin-top: auto;
+  padding-top: 24px;
 }
 
 /* Sign Out button */

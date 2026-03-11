@@ -38,11 +38,16 @@
             <label class="auth-label">Password</label>
             <%= link_to "Forgot Password?", new_password_path(resource_name), class: "auth-forgot-link" %>
           </div>
-          <%= f.input :password,
-                      label: false,
-                      required: false,
-                      placeholder: "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
-                      input_html: { autocomplete: "current-password", class: "auth-input" } %>
+          <div class="auth-input-wrapper">
+            <%= f.input :password,
+                        label: false,
+                        required: false,
+                        placeholder: "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+                        input_html: { autocomplete: "current-password", class: "auth-input", id: "passwordInput" } %>
+            <button type="button" class="auth-eye-btn" onclick="togglePassword()">
+              <i class="fa-regular fa-eye" id="eyeIcon"></i>
+            </button>
+          </div>
         </div>
 
         <%# Submit button %>
@@ -65,10 +70,27 @@
       </button>
     </div>
 
-    <%# Sign up link %>
-    <p class="auth-switch">
-      Don't have an account? <%= link_to "Sign Up", new_user_registration_path, class: "auth-switch-link" %>
-    </p>
+    <%# Sign up link — pinned to bottom %>
+    <div class="auth-footer">
+      <p class="auth-switch">
+        Don't have an account? <%= link_to "Sign Up", new_user_registration_path, class: "auth-switch-link" %>
+      </p>
+    </div>
 
   </div>
 </div>
+
+<%# JS: password show/hide toggle %>
+<script>
+  function togglePassword() {
+    const input = document.getElementById("passwordInput");
+    const icon  = document.getElementById("eyeIcon");
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+      input.type = "password";
+      icon.classList.replace("fa-eye-slash", "fa-eye");
+    }
+  }
+</script>
