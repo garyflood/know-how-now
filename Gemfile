@@ -75,3 +75,4 @@ end
 
 gem "redcarpet", "~> 3.6"
 gem "ruby_llm"
+gem "cloudinary"
