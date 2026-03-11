@@ -23,7 +23,7 @@ class DevicesController < ApplicationController
 
       Respond with a JSON object (no markdown, no code fences) with exactly these keys:
       - "is_device": true if this is a real device, false if it is not
-      - "exact_model": the brand and model number only (e.g. "Toshiba EM131A5C-SS"), with no device type or description appended (null if not a device)
+      - "exact_model": the brand and model number only (e.g. "Toshiba EM131A5C-SS"), with no device type or description appended. If the input is a real device but no specific model is given, pick the most popular or well-known model for that brand/type as your best guess. Only null if not a device at all.
       - "category": which of the following categories best describes it (reply with ONLY the category name exactly as written): #{category_names}
       - "instructions": step by step instructions for how to use this device, written concisely in Markdown
       - "related_devices": an array of 5-7 specific brand and model numbers (e.g. "Toshiba EM131A5C-SS") that the user may have been referring to instead — other real models that match their input
