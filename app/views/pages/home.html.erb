@@ -24,21 +24,25 @@
              muted
              class="camera-video"></video>
 
+      <%# Frozen frame canvas — shown over video after capture %>
+      <canvas data-camera-target="canvas" class="camera-frozen-frame d-none"></canvas>
+
       <%# Viewfinder corner brackets %>
       <div class="camera-viewfinder">
         <div class="vf-corner vf-tl"></div>
         <div class="vf-corner vf-tr"></div>
         <div class="vf-corner vf-bl"></div>
         <div class="vf-corner vf-br"></div>
-        <div class="vf-scan-line"></div>
+        <div class="vf-scan-line" data-camera-target="scanLine"></div>
       </div>
 
       <%# Hint label %>
-      <div class="camera-hint">Point at a device to identify</div>
+      <div class="camera-hint<%= ' camera-hint--error' if @not_a_device %>" data-camera-target="hint"><% if @not_a_device %>not a device - capture a device to identify<% else %>capture a device to identify<% end %></div>
 
       <%# Circle capture button — no text %>
       <button type="button"
               class="capture-btn"
+              data-camera-target="captureBtn"
               data-action="click->camera#capture"
               aria-label="Take picture"></button>
 
@@ -53,9 +57,7 @@
     <%# Hidden field receives the base64 data URI from the camera capture %>
     <input type="hidden" name="device_camera_image" data-camera-target="capturedImageInput">
 
-    <canvas data-camera-target="canvas" class="d-none"></canvas>
-
-    <div class="camera-bottom-bar">
+    <div class="camera-bottom-bar" data-camera-target="bottomBar">
       <%= f.input :name,
                   placeholder: "Search Manually ...",
                   label: false,

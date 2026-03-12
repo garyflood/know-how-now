@@ -39,7 +39,10 @@ class DevicesController < ApplicationController
       response = JSON.parse(RubyLLM.chat.ask(prompt).content)
     end
 
-    raise "\"#{response['exact_model'] || input_name}\" does not appear to be a device." unless response["is_device"]
+    unless response["is_device"]
+      @not_a_device = true
+      raise "\"#{response['exact_model'] || input_name}\" does not appear to be a device."
+    end
     raise "Could not identify an exact model." if response["exact_model"].blank?
 
     @device ||= Device.new

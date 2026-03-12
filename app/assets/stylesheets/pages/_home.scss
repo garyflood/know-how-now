@@ -38,6 +38,18 @@
   background: #000;
 }
 
+// Frozen frame — canvas overlay shown after capture
+.camera-frozen-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 1;
+}
+
 // Viewfinder corner brackets
 .camera-viewfinder {
   position: absolute;
@@ -46,6 +58,7 @@
   right: 8%;
   bottom: 35%;
   pointer-events: none;
+  z-index: 2;
 
   .vf-scan-line {
     position: absolute;
@@ -88,8 +101,14 @@
   font-size: 0.85rem;
   padding: 8px 20px;
   border-radius: 20px;
+  border: 2px solid transparent;
   white-space: nowrap;
   pointer-events: none;
+  z-index: 2;
+
+  &--error {
+    border-color: #e74c3c;
+  }
 }
 
 // Circle capture button
@@ -98,6 +117,7 @@
   bottom: 84px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 2;
   width: 68px;
   height: 68px;
   border-radius: 50%;

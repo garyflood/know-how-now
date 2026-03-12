@@ -7,7 +7,11 @@ export default class extends Controller {
     "permissionPrompt",
     "cameraSection",
     "capturedImageInput",
-    "deniedMessage"
+    "deniedMessage",
+    "hint",
+    "captureBtn",
+    "bottomBar",
+    "scanLine"
   ]
 
   async connect() {
@@ -16,6 +20,7 @@ export default class extends Controller {
 
   disconnect() {
     this.stopStream()
+    clearInterval(this.loadingInterval)
   }
 
   async requestCamera(event) {
@@ -43,18 +48,38 @@ export default class extends Controller {
 
     this.capturedImageInputTarget.value = canvas.toDataURL("image/jpeg", 0.85)
     this.stopStream()
+    this.startLoading(true)
 
     this.element.querySelector("form").requestSubmit()
   }
 
   submitForm() {
     this.stopStream()
+    this.startLoading(false)
     this.element.querySelector("form").requestSubmit()
   }
 
   uploadAndSubmit() {
     this.stopStream()
+    this.startLoading(false)
     this.element.querySelector("form").requestSubmit()
+  }
+
+  startLoading(showFrozenFrame) {
+    // Show frozen camera frame instead of black video
+    if (showFrozenFrame) {
+      this.canvasTarget.classList.remove("d-none")
+    }
+
+    // Animate hint: "Analysing." → "Analysing.." → "Analysing..."
+    if (this.hasHintTarget) {
+      let dots = 1
+      this.hintTarget.textContent = "Analysing."
+      this.loadingInterval = setInterval(() => {
+        dots = (dots % 3) + 1
+        this.hintTarget.textContent = "Analysing" + ".".repeat(dots)
+      }, 500)
+    }
   }
 
   stopStream() {
