@@ -4,6 +4,11 @@ body:has(.device-page) {
   background: #F6F8F8;
 }
 
+/* Remove Bootstrap container's horizontal padding so device-page centers cleanly */
+main:has(.device-page) {
+  padding-left: 0;
+  padding-right: 0;
+}
 
 .device-page {
   width: 100%;
@@ -13,6 +18,8 @@ body:has(.device-page) {
   display: flex;
   flex-direction: column;
   font-family: "Space Grotesk", sans-serif;
+  /* Ensure content never hides behind the fixed bottom navbar (~60px tall) */
+  padding-bottom: 80px;
 }
 
 /* ── Header ──────────────────────────────────────────────────── */
@@ -175,10 +182,11 @@ body:has(.device-page) {
     display: flex;
     flex-direction: column;
     gap: 4px;
-  }
 
-  span {
-    display: block;
+    /* Only block-display the direct label text, not status row children */
+    & > span:not(.device-btn-status) {
+      display: block;
+    }
   }
 
   &:hover {
@@ -226,10 +234,11 @@ body:has(.device-page) {
     display: flex;
     flex-direction: column;
     gap: 4px;
-  }
 
-  span {
-    display: block;
+    /* Only block-display the direct label text, not status row children */
+    & > span:not(.device-btn-status) {
+      display: block;
+    }
   }
 
   &:hover {
@@ -253,6 +262,7 @@ body:has(.device-page) {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.3px;
+  line-height: 1;
 
   &--available {
     color: #22c55e;
@@ -272,6 +282,7 @@ body:has(.device-page) {
   background: #22c55e;
   display: inline-block;
   flex-shrink: 0;
+  vertical-align: middle;
   animation: pulse-dot 1.6s ease-in-out infinite;
 }
 
