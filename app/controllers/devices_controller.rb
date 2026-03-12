@@ -8,7 +8,7 @@ class DevicesController < ApplicationController
 
   # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
   def create
-    uploaded_image = params[:device_image]
+    uploaded_image = params[:device_image].presence || params[:device_camera_image].presence
     input_name = params.dig(:device, :name)
 
     if uploaded_image.blank? && input_name.blank?
@@ -39,7 +39,10 @@ class DevicesController < ApplicationController
       response = JSON.parse(RubyLLM.chat.ask(prompt).content)
     end
 
-    raise "\"#{response['exact_model'] || input_name}\" does not appear to be a device." unless response["is_device"]
+    unless response["is_device"]
+      @not_a_device = true
+      raise "\"#{response['exact_model'] || input_name}\" does not appear to be a device."
+    end
     raise "Could not identify an exact model." if response["exact_model"].blank?
 
     @device ||= Device.new
@@ -104,8 +107,11 @@ class DevicesController < ApplicationController
   end
 
   def upload_device_image_to_cloudinary(uploaded_image)
+    # uploaded_image is either an ActionDispatch::Http::UploadedFile (file upload)
+    # or a base64 data URI string (camera capture)
+    source = uploaded_image.is_a?(String) ? uploaded_image : StringIO.new(uploaded_image.read)
     result = ::Cloudinary::Uploader.upload(
-      StringIO.new(uploaded_image.read),
+      source,
       folder: "know-how-now/devices",
       resource_type: "image"
     )
