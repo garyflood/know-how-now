@@ -7,9 +7,9 @@ module ApplicationHelper
 
   # Renders category image, or default placeholder when the category image file is missing.
   def category_image_tag(category, **options)
-    path = category.image.present? ? "categories/#{category.image}" : "categories/default.png"
+    path = category.image.present? ? "categories/#{category.image}" : "categories/_default.png"
     source = Rails.root.join("app/assets/images", path)
-    path = "categories/default.png" unless File.exist?(source)
+    path = "categories/_default.png" unless File.exist?(source)
     image_tag(path, **options)
   end
 
