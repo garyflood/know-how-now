@@ -1,0 +1,17 @@
+<%# Script / instructions — shown in new window for device's video %>
+<% content_for :title, "#{@device.name} Script" %>
+
+<div class="device-page device-script-page">
+  <div class="device-header">
+    <h1 class="device-title"><%= @device.name %></h1>
+    <span class="device-identified-label">VIDEO SCRIPT</span>
+  </div>
+
+  <% if @video.present? %>
+    <div class="device-script-content">
+      <%= content_tag :div, @video.script, class: "device-script-text", style: "white-space: pre-wrap;" %>
+    </div>
+  <% else %>
+    <p class="text-muted">No script available for this device.</p>
+  <% end %>
+</div>

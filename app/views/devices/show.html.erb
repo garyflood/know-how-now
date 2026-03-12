@@ -26,8 +26,9 @@
   <%# Action buttons — both always shown; video button indicates availability %>
   <div class="device-actions">
 
-    <%# Watch Video Guide — dimmed with notice if no video exists %>
-    <%= link_to (@device.video.present? ? "#" : nil), class: "btn device-btn-video #{'device-btn-video--unavailable' unless @device.video.present?}" do %>
+    <%# Watch Video Guide — links to Cloudinary video when available %>
+    <% video_url = @device.video.present? && @device.video.source.present? ? @device.video.source : nil %>
+    <%= link_to (video_url || nil), class: "btn device-btn-video #{'device-btn-video--unavailable' unless video_url}", target: (video_url ? "_blank" : nil), rel: (video_url ? "noopener noreferrer" : nil) do %>
       <div class="device-btn-icon">
         <i class="fa-solid fa-play"></i>
       </div>
@@ -56,6 +57,21 @@
           <span class="device-btn-dot"></span> Available
         </span>
       </div>
+    <% end %>
+
+    <%# Read script — video instructions in new window (when video exists) %>
+    <% if @device.video.present? %>
+      <%= link_to script_device_path(@device), class: "btn device-btn-manual", target: "_blank", rel: "noopener noreferrer" do %>
+        <div class="device-btn-icon">
+          <i class="fa-solid fa-file-lines"></i>
+        </div>
+        <div class="device-btn-label">
+          <span>Read Script</span>
+          <span class="device-btn-status device-btn-status--available">
+            <span class="device-btn-dot"></span> Available
+          </span>
+        </div>
+      <% end %>
     <% end %>
 
   </div>

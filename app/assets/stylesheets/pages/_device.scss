@@ -444,3 +444,22 @@ body:has(.device-page) {
     line-height: 1.8;
   }
 }
+
+/* ── Script page (script.html.erb, new window) ────────────────── */
+
+.device-script-page .device-header {
+  flex-direction: column;
+  gap: 4px;
+}
+
+.device-script-content {
+  padding: 20px;
+  flex: 1;
+}
+
+.device-script-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #444;
+  word-wrap: break-word;
+}

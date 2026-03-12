@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :devices, only: [:create, :show] do
     member do
       get :manual
+      get :script
     end
   end
   get "explore", to: "pages#explore"

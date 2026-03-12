@@ -11,6 +11,11 @@ class DevicesController < ApplicationController
     @device = Device.find(params[:id])
   end
 
+  def script
+    @device = Device.find(params[:id])
+    @video = @device.video
+  end
+
   # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
   def create
     uploaded_image = params[:device_image].presence || params[:device_camera_image].presence

@@ -42,10 +42,11 @@ class VideosController < ApplicationController
 
     video_url = upload_video_to_cloudinary(params[:video_file]) if params[:video_file].present?
 
+    script_text = params[:script].to_s.strip.presence || "No script provided."
     video = Video.new(
       user: current_user,
       device: device,
-      script: "See attached script.",
+      script: script_text,
       summary: "Video tutorial for #{device.name}",
       tags: tags,
       views: 0,
