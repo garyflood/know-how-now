@@ -96,6 +96,26 @@ body:has(.device-page) {
   border-radius: 20px;
 }
 
+.device-hero-slides {
+  position: relative;
+  height: 220px;
+  border-radius: 20px;
+  overflow: hidden;
+
+  .device-hero-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+
+    &--active {
+      opacity: 1;
+    }
+  }
+}
+
 /* Device name overlaid on hero image */
 .device-hero-name {
   position: absolute;
