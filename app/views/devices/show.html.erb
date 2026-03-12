@@ -35,7 +35,7 @@
         <span>Watch Video Guide</span>
         <% if @device.video.present? %>
           <span class="device-btn-status device-btn-status--available">
-            <span class="device-btn-dot"></span> Available
+            <span class="device-btn-dot"></span><span>Available</span>
           </span>
         <% else %>
           <span class="device-btn-status device-btn-status--unavailable">
@@ -53,7 +53,7 @@
       <div class="device-btn-label">
         <span>Read Manual</span>
         <span class="device-btn-status device-btn-status--available">
-          <span class="device-btn-dot"></span> Available
+          <span class="device-btn-dot"></span><span>Available</span>
         </span>
       </div>
     <% end %>
