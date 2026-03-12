@@ -16,7 +16,15 @@
 
   <%# Hero image with verified badge %>
   <div class="device-hero">
-    <%= device_image_tag(@device, class: "device-hero-img", alt: @device.name) %>
+    <% if @device.images.count > 1 %>
+      <div class="device-hero-slides">
+        <% @device.images.each_with_index do |url, i| %>
+          <%= image_tag url, class: "device-hero-img#{i.zero? ? ' device-hero-img--active' : ''}", alt: @device.name %>
+        <% end %>
+      </div>
+    <% else %>
+      <%= device_image_tag(@device, class: "device-hero-img", alt: @device.name) %>
+    <% end %>
     <span class="device-verified-badge">
       <i class="fa-solid fa-circle-check"></i> VERIFIED MODEL
     </span>
@@ -36,7 +44,7 @@
         <span>Watch Video Guide</span>
         <% if @device.video.present? %>
           <span class="device-btn-status device-btn-status--available">
-            <span class="device-btn-dot"></span> Available
+            <span class="device-btn-dot"></span><span>Available</span>
           </span>
         <% else %>
           <span class="device-btn-status device-btn-status--unavailable">
@@ -54,7 +62,7 @@
       <div class="device-btn-label">
         <span>Read Manual</span>
         <span class="device-btn-status device-btn-status--available">
-          <span class="device-btn-dot"></span> Available
+          <span class="device-btn-dot"></span><span>Available</span>
         </span>
       </div>
     <% end %>
@@ -128,6 +136,16 @@
   // Remove layout's inline padding-bottom so no gap appears below the page content
   const mainEl = document.querySelector("main");
   if (mainEl) mainEl.style.paddingBottom = "0";
+
+  const slides = document.querySelectorAll(".device-hero-slides .device-hero-img");
+  if (slides.length > 1) {
+    let current = 0;
+    setInterval(function () {
+      slides[current].classList.remove("device-hero-img--active");
+      current = (current + 1) % slides.length;
+      slides[current].classList.add("device-hero-img--active");
+    }, 3500);
+  }
 
   const inner = document.getElementById("carouselInner");
   if (inner) {

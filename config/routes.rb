@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: "users/registrations" }
   root to: "pages#home"
-  resources :devices, only: [:create, :show] do
+  resources :devices, only: [:create, :show, :update] do
     member do
       get :manual
       get :script
