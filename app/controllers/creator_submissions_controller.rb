@@ -39,16 +39,18 @@ class CreatorSubmissionsController < ApplicationController
 
     tags = parse_tags(params[:tags])
     tags = ["creator-submission"] if tags.empty?
+
+    video_url = upload_video_to_cloudinary(params[:video_file]) if params[:video_file].present?
+
     video = Video.new(
       user: current_user,
       device: device,
       script: "See attached script.",
       summary: "Video tutorial for #{device.name}",
       tags: tags,
-      views: 0
+      views: 0,
+      source: video_url
     )
-    video.video_file.attach(params[:video_file]) if params[:video_file].present?
-    video.script_file.attach(params[:script_file]) if params[:script_file].present?
 
     if video.save
       flash[:notice] = "Your submission has been submitted for review. Thank you!"
@@ -85,5 +87,18 @@ class CreatorSubmissionsController < ApplicationController
       Rails.logger.error "Cloudinary photo upload failed: #{e.message}"
       nil
     end
+  end
+
+  def upload_video_to_cloudinary(file)
+    return nil if file.blank? || !file.respond_to?(:read)
+    result = ::Cloudinary::Uploader.upload(
+      StringIO.new(file.read),
+      folder: "know-how-now/videos",
+      resource_type: "video"
+    )
+    result["secure_url"]
+  rescue StandardError => e
+    Rails.logger.error "Cloudinary video upload failed: #{e.message}"
+    nil
   end
 end
