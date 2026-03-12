@@ -6,6 +6,10 @@ class DevicesController < ApplicationController
     @device.increment!(:views)
   end
 
+  def manual
+    @device = Device.find(params[:id])
+  end
+
   # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
   def create
     uploaded_image = params[:device_image]

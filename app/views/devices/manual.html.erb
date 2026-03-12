@@ -1,0 +1,27 @@
+<%# Text Manual page — device photo + full instructions %>
+<% content_for :title, "#{@device.name} Manual" %>
+
+<div class="device-page">
+
+  <%# Header: back to device show %>
+  <div class="device-header">
+    <%= link_to device_path(@device), class: "device-back-link" do %>
+      <i class="fa-solid fa-arrow-left"></i>
+    <% end %>
+    <div class="device-header-info">
+      <span class="device-identified-label">TEXT MANUAL</span>
+      <h1 class="device-title"><%= @device.name %></h1>
+    </div>
+  </div>
+
+  <%# Device photo %>
+  <div class="device-hero">
+    <%= device_image_tag(@device, class: "device-hero-img", alt: @device.name) %>
+  </div>
+
+  <%# Full text instructions %>
+  <div class="device-manual">
+    <%= markdown(@device.text_instructions) %>
+  </div>
+
+</div>

@@ -1,29 +1,145 @@
-<div class="mb-3">
-  <%= device_image_tag(@device, class: "rounded shadow-sm w-100", alt: @device.name, style: "max-height: 200px; object-fit: cover;") %>
-</div>
+<%# Device show page — matches Know-How UI design %>
+<% content_for :title, @device.name %>
 
-<div class="mb-2">
-  <span class="badge bg-secondary"><%= @device.category.category_name %></span>
-  <span class="text-muted ms-2"><%= @device.views %> <%= "view".pluralize(@device.views) %></span>
-</div>
+<div class="device-page">
 
-<h1 class="fw-bold"><%= @device.name %></h1>
-
-<div class="mt-4">
-  <%= markdown(@device.text_instructions) %>
-</div>
-
-<% if @device.related_devices.present? %>
-  <div class="mt-5">
-    <h5 class="fw-semibold">Related Devices</h5>
-    <ul class="list-unstyled mt-2">
-      <% @device.related_devices.each do |related| %>
-        <li>
-          <%= button_to related, devices_path, params: { device: { name: related } },
-                method: :post,
-                class: "btn btn-link p-0 text-decoration-none text-muted" %>
-        </li>
-      <% end %>
-    </ul>
+  <%# Header: back arrow + identified label + device name %>
+  <div class="device-header">
+    <%= link_to :back, class: "device-back-link" do %>
+      <i class="fa-solid fa-arrow-left"></i>
+    <% end %>
+    <div class="device-header-info">
+      <span class="device-identified-label">IDENTIFIED DEVICE</span>
+      <h1 class="device-title"><%= @device.name %></h1>
+    </div>
   </div>
-<% end %>
+
+  <%# Hero image with verified badge %>
+  <div class="device-hero">
+    <%= device_image_tag(@device, class: "device-hero-img", alt: @device.name) %>
+    <span class="device-verified-badge">
+      <i class="fa-solid fa-circle-check"></i> VERIFIED MODEL
+    </span>
+    <h2 class="device-hero-name"><%= @device.name %></h2>
+  </div>
+
+  <%# Action buttons — both always shown; video button indicates availability %>
+  <div class="device-actions">
+
+    <%# Watch Video Guide — dimmed with notice if no video exists %>
+    <%= link_to (@device.video.present? ? "#" : nil), class: "btn device-btn-video #{'device-btn-video--unavailable' unless @device.video.present?}" do %>
+      <div class="device-btn-icon">
+        <i class="fa-solid fa-play"></i>
+      </div>
+      <div class="device-btn-label">
+        <span>Watch Video Guide</span>
+        <% if @device.video.present? %>
+          <span class="device-btn-status device-btn-status--available">
+            <span class="device-btn-dot"></span> Available
+          </span>
+        <% else %>
+          <span class="device-btn-status device-btn-status--unavailable">
+            No video available
+          </span>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%# Read Manual — always available %>
+    <%= link_to manual_device_path(@device), class: "btn device-btn-manual" do %>
+      <div class="device-btn-icon">
+        <i class="fa-solid fa-book-open"></i>
+      </div>
+      <div class="device-btn-label">
+        <span>Read Manual</span>
+        <span class="device-btn-status device-btn-status--available">
+          <span class="device-btn-dot"></span> Available
+        </span>
+      </div>
+    <% end %>
+
+  </div>
+
+  <%# Related devices — horizontal scroll with images %>
+  <% if @device.related_devices.present? %>
+    <div class="device-related-section">
+      <p class="device-related-label">
+        <i class="fa-solid fa-rotate-left"></i>
+        SPECIFY MODEL/SELECT A DIFFERENT MODEL
+      </p>
+
+      <div class="device-related-scroll">
+        <div class="device-carousel-inner" id="carouselInner">
+
+          <%# Current device card — highlighted as selected %>
+          <div class="device-related-card device-related-card--active">
+            <%= device_image_tag(@device, class: "device-related-img", alt: @device.name) %>
+            <span class="device-related-check"><i class="fa-solid fa-check"></i></span>
+            <p class="device-related-name"><%= @device.name %></p>
+          </div>
+
+          <%# Other possible device models — clicking searches for that device %>
+          <% @device.related_devices.each do |related_name| %>
+            <% related = Device.find_by(name: related_name) %>
+            <%= button_to devices_path, method: :post,
+                          params: { device: { name: related_name } },
+                          class: "device-related-card" do %>
+              <% if related %>
+                <%= device_image_tag(related, class: "device-related-img", alt: related_name) %>
+              <% else %>
+                <%= category_image_tag(@device.category, class: "device-related-img", alt: related_name) %>
+              <% end %>
+              <p class="device-related-name"><%= related_name %></p>
+            <% end %>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+
+    <%# See More — searches for more devices like this one %>
+    <div class="device-see-more-wrapper">
+      <%= button_to "Click to See More", devices_path, method: :post,
+                    params: { device: { name: @device.name } },
+                    class: "btn device-see-more-btn" %>
+    </div>
+  <% end %>
+
+</div>
+
+<%# CSS ticker carousel — duplicate cards and set animation duration based on card count %>
+<script>
+  // Remove layout's inline padding-bottom so no gap appears below the page content
+  const mainEl = document.querySelector("main");
+  if (mainEl) mainEl.style.paddingBottom = "0";
+
+  const inner = document.getElementById("carouselInner");
+  if (inner) {
+    // Duplicate the inner HTML for a seamless loop
+    inner.innerHTML += inner.innerHTML;
+
+    // Set duration proportional to number of cards so speed stays consistent
+    const cardCount = inner.querySelectorAll(".device-related-card").length;
+    inner.style.animationDuration = (cardCount * 2.5) + "s";
+
+    // On card click: pause animation and show checkmark
+    inner.addEventListener("click", function (e) {
+      const card = e.target.closest(".device-related-card");
+      if (!card) return;
+
+      inner.classList.add("paused");
+
+      inner.querySelectorAll(".device-related-card").forEach(function (c) {
+        c.classList.remove("device-related-card--active");
+        const existing = c.querySelector(".device-related-check");
+        if (existing) existing.remove();
+      });
+
+      card.classList.add("device-related-card--active");
+      const check = document.createElement("span");
+      check.className = "device-related-check";
+      check.innerHTML = '<i class="fa-solid fa-check"></i>';
+      card.appendChild(check);
+    });
+  }
+</script>
