@@ -24,6 +24,11 @@
   <%# Edit Profile button %>
   <%= link_to "Edit Profile", edit_profile_path, class: "btn profile-edit-btn" %>
 
+  <%# Creator Submission — submit a video tutorial %>
+  <%= link_to new_creator_submission_path, class: "btn profile-edit-btn mt-2", style: "background: #4ECDC4; color: white; border: none;" do %>
+    <i class="fa-solid fa-upload me-2"></i> Submit a Tutorial
+  <% end %>
+
   <%# Stats grid — views and videos only %>
   <div class="profile-stats">
     <div class="profile-stat-card">

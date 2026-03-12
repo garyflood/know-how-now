@@ -2,6 +2,9 @@ class Video < ApplicationRecord
   belongs_to :user
   belongs_to :device
 
+  has_one_attached :video_file
+  has_one_attached :script_file
+
   validates :summary, presence: true
   validates :tags, presence: true
   validates :script, presence: true

@@ -1,0 +1,79 @@
+// Creator Submission form (Step 2: Device Identification)
+.creator-submission-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding-bottom: 100px;
+}
+
+.creator-submission-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.creator-submission-back {
+  color: #333;
+  font-size: 1.25rem;
+  text-decoration: none;
+
+  &:hover {
+    color: #4ECDC4;
+  }
+}
+
+.creator-submission-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.creator-submission-progress {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.creator-upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  background: #f8f9fa;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+
+  &:hover {
+    border-color: #4ECDC4;
+    background: #f0fdfc;
+  }
+}
+
+.creator-upload-zone-sm {
+  min-height: 120px;
+}
+
+.creator-upload-label {
+  cursor: pointer;
+  margin: 0;
+  padding: 16px;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.creator-submit-btn {
+  background: #4ECDC4 !important;
+  border: none;
+
+  &:hover {
+    background: #3dbdb5 !important;
+    border: none;
+  }
+}
