@@ -1,3 +1,23 @@
+// Camera permission button — matches profile edit button style
+.camera-permission-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #4ECDC4, #44E0B8);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.9;
+    color: white;
+  }
+}
+
 // Camera UI
 
 .camera-container {

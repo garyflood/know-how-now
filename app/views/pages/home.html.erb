@@ -4,10 +4,13 @@
   <div data-camera-target="permissionPrompt" class="text-center mb-4 p-4 rounded border">
     <p class="text-muted mb-3">Enable your camera to take a photo of your device</p>
     <button type="button"
-            class="btn ksn-btn-primary"
+            class="btn camera-permission-btn"
             data-action="click->camera#requestCamera">
       Enable Camera
     </button>
+    <p data-camera-target="deniedMessage" class="text-danger mt-3 mb-0 d-none small">
+      Camera access was denied. Please enable it in your browser or device settings and reload the page.
+    </p>
   </div>
 
   <%# Camera section — hidden until permission is granted %>

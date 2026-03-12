@@ -6,7 +6,8 @@ export default class extends Controller {
     "canvas",
     "permissionPrompt",
     "cameraSection",
-    "capturedImageInput"
+    "capturedImageInput",
+    "deniedMessage"
   ]
 
   async connect() {
@@ -17,7 +18,7 @@ export default class extends Controller {
     this.stopStream()
   }
 
-  async requestCamera() {
+  async requestCamera(event) {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
       this.stream = stream
@@ -27,6 +28,9 @@ export default class extends Controller {
     } catch {
       this.permissionPromptTarget.classList.remove("d-none")
       this.cameraSectionTarget.classList.add("d-none")
+      if (event) {
+        this.deniedMessageTarget.classList.remove("d-none")
+      }
     }
   }
 
