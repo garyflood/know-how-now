@@ -55,7 +55,7 @@ class DevicesController < ApplicationController
 
     existing = Device.find_by(name: @device.name)
     if existing
-      existing.update_column(:images, (existing.images + [cloudinary_url]).uniq) if cloudinary_url.present?
+      append_image_to_device(existing, cloudinary_url)
       flash[:notice] = "We already have instructions for #{existing.name}!"
       redirect_to device_path(existing) and return
     end
@@ -79,7 +79,36 @@ class DevicesController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
 
+  def update
+    @device = Device.find(params[:id])
+    uploaded_image = params[:device_image].presence || params[:device_camera_image].presence
+
+    if uploaded_image.blank?
+      flash[:alert] = "Please upload an image to update the device."
+      redirect_to device_path(@device) and return
+    end
+
+    cloudinary_url = upload_device_image_to_cloudinary(uploaded_image)
+    if cloudinary_url.nil?
+      flash[:alert] = "Image upload failed. Please try again."
+      redirect_to device_path(@device) and return
+    end
+
+    append_image_to_device(@device, cloudinary_url)
+    flash[:notice] = "Image added to #{@device.name}!"
+    redirect_to device_path(@device)
+  rescue ActiveRecord::RecordNotFound
+    flash[:alert] = "Device not found."
+    redirect_to root_path
+  end
+
   private
+
+  def append_image_to_device(device, cloudinary_url)
+    return if cloudinary_url.blank?
+
+    device.update_column(:images, (device.images + [cloudinary_url]).uniq)
+  end
 
   def device_params
     params.require(:device).permit(:name)
