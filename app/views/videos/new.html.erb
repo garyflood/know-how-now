@@ -1,10 +1,10 @@
-<%# Creator Submission — Step 2: Device Identification (video, script, photos, tags) %>
+<%# Upload video — device identification (video, script, photos, tags) %>
 <div class="creator-submission-page">
   <div class="creator-submission-header">
     <%= link_to profile_path, class: "creator-submission-back" do %>
       <i class="fa-solid fa-arrow-left"></i>
     <% end %>
-    <h1 class="creator-submission-title">Creator Submission</h1>
+    <h1 class="creator-submission-title">Upload Video</h1>
   </div>
 
   <div class="creator-submission-progress mb-3">
@@ -16,7 +16,7 @@
     <div class="progress-bar" role="progressbar" style="width: 66%; background: #4ECDC4;"></div>
   </div>
 
-  <%= form_with url: creator_submissions_path, method: :post, local: true, html: { multipart: true, class: "creator-submission-form" } do |f| %>
+  <%= form_with url: videos_path, method: :post, local: true, html: { multipart: true, class: "creator-submission-form" } do |f| %>
 
     <div class="mb-4">
       <label class="form-label fw-bold">Confirm Device Model</label>

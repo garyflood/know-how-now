@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreatorSubmissionsController < ApplicationController
+class VideosController < ApplicationController
   before_action :authenticate_user!
 
   def new
