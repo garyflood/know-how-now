@@ -1,0 +1,70 @@
+<%# Related devices page — list of alternative matches for a device %>
+<% content_for :title, "Identify Device" %>
+
+<div class="device-page device-related-page">
+
+  <%# Header: back arrow + "Identify Device" title %>
+  <div class="device-header">
+    <%= link_to device_path(@device), class: "device-back-link" do %>
+      <i class="fa-solid fa-arrow-left"></i>
+    <% end %>
+    <div class="device-header-info">
+      <h1 class="device-title">Identify Device</h1>
+    </div>
+  </div>
+
+  <%# Search input — submits to devices#create exactly like the home page search %>
+  <%= form_with url: devices_path, method: :post, class: "device-match-search-wrapper" do |f| %>
+    <div class="device-match-search">
+      <i class="fa-solid fa-magnifying-glass device-match-search-icon"></i>
+      <%= f.text_field :name,
+            name: "device[name]",
+            placeholder: "Input exact model name...",
+            class: "device-match-search-input",
+            autocomplete: "off" %>
+    </div>
+  <% end %>
+
+  <%# Section label %>
+  <p class="device-match-label">
+    <i class="fa-solid fa-layer-group"></i> ALTERNATIVE MATCHES
+  </p>
+
+  <%# Device list %>
+  <div class="device-match-list" id="relatedList">
+
+    <%# Current device — shown as selected %>
+    <div class="device-match-row device-match-row--selected">
+      <%= device_image_tag(@device, class: "device-match-img", alt: @device.name) %>
+      <span class="device-match-name"><%= @device.name %></span>
+      <span class="device-match-radio device-match-radio--selected"></span>
+    </div>
+
+    <%# Related device models from the AI response %>
+    <% @device.related_devices.each do |related_name| %>
+      <% related = Device.find_by(name: related_name) %>
+
+      <% if related %>
+        <%# Device already exists — link directly to its show page %>
+        <%= link_to device_path(related), class: "device-match-row" do %>
+          <%= device_image_tag(related, class: "device-match-img", alt: related_name) %>
+          <span class="device-match-name"><%= related_name %></span>
+          <span class="device-match-radio"></span>
+        <% end %>
+      <% else %>
+        <%# Device doesn't exist yet — POST to create it via the AI %>
+        <%= button_to devices_path, method: :post,
+              params: { device: { name: related_name } },
+              class: "device-match-row" do %>
+          <%= category_image_tag(@device.category, class: "device-match-img", alt: related_name) %>
+          <span class="device-match-name"><%= related_name %></span>
+          <span class="device-match-radio"></span>
+        <% end %>
+      <% end %>
+
+    <% end %>
+
+  </div>
+
+</div>
+

@@ -105,11 +105,9 @@
       </div>
     </div>
 
-    <%# See More — searches for more devices like this one %>
+    <%# See More — opens the full related devices list page %>
     <div class="device-see-more-wrapper">
-      <%= button_to "Click to See More", devices_path, method: :post,
-                    params: { device: { name: @device.name } },
-                    class: "btn device-see-more-btn" %>
+      <%= link_to "Click to See More", related_device_path(@device), class: "btn device-see-more-btn" %>
     </div>
   <% end %>
 
