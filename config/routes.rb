@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       get :manual
     end
   end
+  resources :bookmarks, only: [:create, :destroy, :index]
   get "explore", to: "pages#explore"
   get "explore/category/:id", to: "pages#explore_category", as: :explore_category
   get "profile", to: "users#show", as: :profile

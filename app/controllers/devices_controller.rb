@@ -9,6 +9,7 @@ class DevicesController < ApplicationController
   # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity
   def manual
     @device = Device.find(params[:id])
+    @bookmark = user_signed_in? ? current_user.bookmarks.find_by(device: @device) : nil
   end
 
   # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
