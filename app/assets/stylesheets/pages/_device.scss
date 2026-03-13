@@ -72,6 +72,53 @@ main:has(.device-page) {
   line-height: 1.2;
 }
 
+.device-header-bookmark {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.device-bookmark-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  color: #1a1a2e;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+
+  &:hover {
+    color: #4ECDC4;
+  }
+
+  &.device-bookmark-btn--saved {
+    color: #4ECDC4;
+  }
+}
+
+.device-manual-bookmark-section {
+  padding: 16px 20px 0;
+}
+
+.device-manual-signin-hint,
+.device-manual-saved-hint {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.device-btn-manual--outline {
+  background: transparent !important;
+  border: 2px solid #4ECDC4;
+  color: #4ECDC4;
+
+  &:hover {
+    background: rgba(78, 205, 196, 0.1) !important;
+    border-color: #4ECDC4;
+    color: #4ECDC4;
+  }
+}
+
 /* ── Hero image ──────────────────────────────────────────────── */
 
 .device-hero {

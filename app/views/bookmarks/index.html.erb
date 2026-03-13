@@ -1,0 +1,43 @@
+<%# Saved Library / My Manuals — list of bookmarked devices with View Guide + Unsave %>
+<% content_for :title, "My Manuals" %>
+
+<div class="profile-page saved-manuals-page">
+  <div class="profile-header">
+    <%= link_to profile_path, class: "profile-header-link" do %>
+      <i class="fa-solid fa-arrow-left"></i>
+    <% end %>
+    <h2 class="profile-header-title">My Manuals</h2>
+    <span class="profile-header-link" style="visibility: hidden;"><i class="fa-solid fa-ellipsis"></i></span>
+  </div>
+
+  <% if @bookmarks.any? %>
+    <p class="text-muted small mb-3">Saved Library (<%= @bookmarks.size %>)</p>
+    <ul class="saved-manuals-list list-unstyled">
+      <% @bookmarks.each do |bookmark| %>
+        <% device = bookmark.device %>
+        <li class="saved-manuals-item">
+          <div class="saved-manuals-item-inner">
+            <div class="saved-manuals-item-img">
+              <%= device_image_tag(device, alt: device.name, class: "rounded") %>
+            </div>
+            <div class="saved-manuals-item-body">
+              <span class="saved-manuals-item-name"><%= device.name %></span>
+              <span class="saved-manuals-item-meta text-muted small"><%= device.category&.category_name %></span>
+              <%= link_to manual_device_path(device), class: "btn btn-sm saved-manuals-view-btn mt-2" do %>
+                <i class="fa-solid fa-book-open me-1"></i> View Guide
+              <% end %>
+            </div>
+            <%= button_to bookmark_path(bookmark), method: :delete, class: "saved-manuals-unsave-btn", title: "Unsave", form: { data: { turbo_confirm: "Remove from saved manuals?" } } do %>
+              <i class="fa-regular fa-bookmark"></i>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-muted">No saved manuals yet. Bookmark a device from its manual page.</p>
+    <%= link_to explore_path, class: "btn profile-edit-btn mt-2" do %>
+      <i class="fa-solid fa-compass me-2"></i> Explore devices
+    <% end %>
+  <% end %>
+</div>
