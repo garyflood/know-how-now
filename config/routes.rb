@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :devices, only: [:create, :show, :update] do
     member do
       get :manual
+      get :related
     end
     resources :videos, only: [:show]
   end

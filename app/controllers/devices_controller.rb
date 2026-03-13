@@ -10,6 +10,10 @@ class DevicesController < ApplicationController
     @device = Device.find(params[:id])
   end
 
+  def related
+    @device = Device.find(params[:id])
+  end
+
   def create
     uploaded_image = params[:device_image].presence || params[:device_camera_image].presence
     input_name = params.dig(:device, :name)
