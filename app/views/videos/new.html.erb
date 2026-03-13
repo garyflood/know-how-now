@@ -1,0 +1,33 @@
+<h1>Upload Video</h1>
+
+<%= form_with url: user_videos_path(current_user), scope: :video, method: :post, html: { multipart: true } do |f| %>
+  <% if @video.errors.any? %>
+    <div>
+      <% @video.errors.full_messages.each do |msg| %>
+        <p><%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if flash[:alert].present? %>
+    <p><%= flash[:alert] %></p>
+  <% end %>
+
+  <div>
+    <label for="device_name">Device Name</label>
+    <%= text_field_tag :device_name, params[:device_name], placeholder: "e.g. Samsung Galaxy S21", required: true %>
+  </div>
+
+  <div>
+    <label for="video_file">Video File</label>
+    <%= file_field_tag :video_file, accept: "video/*", required: true %>
+  </div>
+
+  <div>
+    <%= f.label :summary %>
+    <%= f.text_field :summary, placeholder: "Brief description of the video", required: true %>
+  </div>
+
+
+  <%= f.submit "Upload Video" %>
+<% end %>
