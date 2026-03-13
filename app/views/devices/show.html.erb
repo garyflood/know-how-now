@@ -35,7 +35,7 @@
   <div class="device-actions">
 
     <%# Watch Video Guide — dimmed with notice if no video exists %>
-    <%= link_to (@device.video.present? ? "#" : nil), class: "btn device-btn-video #{'device-btn-video--unavailable' unless @device.video.present?}" do %>
+    <%= link_to (@device.video.present? ? device_video_path(@device, @device.video) : nil), class: "btn device-btn-video #{'device-btn-video--unavailable' unless @device.video.present?}" do %>
       <div class="device-btn-icon">
         <i class="fa-solid fa-play"></i>
       </div>
