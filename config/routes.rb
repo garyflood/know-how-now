@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: "users/registrations" }
   root to: "pages#home"
+  resources :users, only: [] do
+    resources :videos, only: [:new, :create]
+  end
+
   resources :devices, only: [:create, :show, :update] do
     member do
       get :manual
     end
+    resources :videos, only: [:show]
   end
   get "explore", to: "pages#explore"
   get "explore/category/:id", to: "pages#explore_category", as: :explore_category

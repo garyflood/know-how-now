@@ -24,6 +24,9 @@
   <%# Edit Profile button %>
   <%= link_to "Edit Profile", edit_profile_path, class: "btn profile-edit-btn" %>
 
+  <%# Upload Video button %>
+  <%= link_to "Upload Video", new_user_video_path(current_user), class: "btn profile-edit-btn" %>
+
   <%# Stats grid — views and videos only %>
   <div class="profile-stats">
     <div class="profile-stat-card">
