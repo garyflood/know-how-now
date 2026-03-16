@@ -29,6 +29,7 @@ class VideosController < ApplicationController
   def show
     @device = Device.find(params[:device_id])
     @video = @device.video
+    @video.increment!(:views)
   end
 
   private
