@@ -1,5 +1,5 @@
 class VideosController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:show]
+  skip_before_action :authenticate_user!, only: [:show, :contributor]
 
   before_action :set_user, only: [:new, :create]
   before_action :authorize_user!, only: [:new, :create]
@@ -42,6 +42,13 @@ class VideosController < ApplicationController
     @video = @device.video
     @video.increment!(:views)
     @bookmark = user_signed_in? ? current_user.bookmarks.find_by(device: @device) : nil
+  end
+
+  def contributor
+    @contributor = User.find(params[:id])
+    @tab = params[:tab] == "most_popular" ? "most_popular" : "all"
+    @videos = @tab == "most_popular" ? @contributor.videos.order(views: :desc) : @contributor.videos.order(created_at: :desc)
+    @total_views = @contributor.videos.sum(:views)
   end
 
   private
