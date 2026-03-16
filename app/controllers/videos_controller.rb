@@ -11,6 +11,9 @@ class VideosController < ApplicationController
   def create
     device, _status = Device.find_or_create_from_name(params[:device_name])
 
+    Array(params[:device_images]).each do |image|
+      url = Device.upload_image_to_cloudinary(image)
+      device.append_image(url) if url
     if device.video.present?
       @video = Video.new
       flash.now[:alert] = "#{device.name} already has a video."
