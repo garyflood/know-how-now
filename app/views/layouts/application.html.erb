@@ -6,6 +6,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="KnowHowNow">
     <meta name="mobile-web-app-capable" content="yes">
+
+    <meta property="og:title" content="<%= content_for(:title) || "Know How Now" %>" />
+    <meta property="og:description" content="Learn how to use any device" />
+    <meta property="og:image" content="<%= image_url('icons/og-image.png') %>" />
+    <meta property="og:url" content="<%= request.original_url %>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Know How Now" />
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= favicon_link_tag %>

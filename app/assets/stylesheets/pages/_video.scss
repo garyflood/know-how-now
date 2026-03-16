@@ -94,6 +94,12 @@ main:has(.video-page) {
   color: #1a1a2e;
   margin: 0;
   line-height: 1.3;
+  text-decoration: none;
+
+  &:hover {
+    color: #4ECDC4;
+    text-decoration: none;
+  }
 }
 
 /* Bookmark button — teal rounded square */
@@ -131,6 +137,33 @@ main:has(.video-page) {
   font-size: 13px;
   color: #888;
   margin: 0;
+}
+
+/* Device name — clickable "Back to Device" breadcrumb */
+.video-device-row {
+  margin: 10px 0 0;
+  font-size: 14px;
+}
+
+.video-device-link {
+  color: #4ECDC4;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* Read Manual button row — reuses device page turquoise/white design */
+.video-actions {
+  display: flex;
+  gap: 12px;
+  padding: 0 20px 20px;
+}
+
+.video-read-manual-btn {
+  flex: 1;
 }
 
 /* ── Uploader card ───────────────────────────────────────────── */

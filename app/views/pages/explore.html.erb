@@ -1,22 +1,142 @@
-<%# Explore: browse categories (with images), then devices in a category %>
-<div class="w-100">
-  <h1 class="mb-4">Explore</h1>
-  <p class="text-muted mb-4">Choose a category to browse devices.</p>
+<%# Explore page — recently added devices marquee, popular guides %>
+<div class="explore-page">
+  <header class="explore-header">
+    <h1 class="explore-title">Explore</h1>
+  </header>
 
-  <div class="row g-3">
-    <% @categories.each do |category| %>
-      <div class="col-6 col-md-4 col-lg-3">
-        <%= link_to explore_category_path(category), class: "text-decoration-none text-dark" do %>
-          <div class="card h-100 explore-category-card border rounded shadow-sm">
-            <div class="explore-category-card-img-wrapper">
-              <%= category_image_tag(category, class: "card-img-top", alt: category.category_name) %>
+  <%# Recently Added Devices — horizontal marquee with auto-scroll %>
+  <section class="explore-section mt-4">
+    <div class="explore-section-header">
+      <h2 class="explore-section-title">Recently Added Devices</h2>
+      <% if @recent_devices.any? %>
+        <%= link_to "View all", explore_recent_devices_path, class: "explore-section-link" %>
+      <% end %>
+    </div>
+
+    <% if @recent_devices.any? %>
+      <div class="explore-marquee-outer" id="recentlyAddedOuter">
+        <div class="explore-marquee-inner" id="recentlyAddedInner">
+          <% @recent_devices.each do |device| %>
+            <%= link_to device_path(device), class: "explore-device-card" do %>
+              <div class="explore-device-image">
+                <%= device_image_tag(device, alt: device.name) %>
+              </div>
+              <div class="explore-device-meta">
+                <span class="explore-device-name"><%= device.name %></span>
+                <span class="explore-device-category text-muted small"><%= device.category&.category_name %></span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <p class="text-muted small mt-2">No devices have been added yet.</p>
+    <% end %>
+  </section>
+
+  <%# Popular Guides — videos ordered by views (highest first) %>
+  <section class="explore-section mt-4">
+    <div class="explore-section-header">
+      <h2 class="explore-section-title">Popular Guides</h2>
+    </div>
+
+    <% if @popular_videos.any? %>
+      <div class="explore-guides-list">
+        <% @popular_videos.each do |video| %>
+          <% device = video.device %>
+          <% next unless device %>
+          <%= link_to device_video_path(device, video), class: "explore-guide-card" do %>
+            <div class="explore-guide-thumb">
+              <%= device_image_tag(device, alt: device.name) %>
+              <div class="explore-guide-play">
+                <i class="fa-solid fa-play"></i>
+              </div>
             </div>
-            <div class="card-body py-2 text-center">
-              <span class="card-title small fw-semibold"><%= category.category_name %></span>
+            <div class="explore-guide-body">
+              <h3 class="explore-guide-title"><%= video.summary %></h3>
+              <p class="explore-guide-meta text-muted small mb-0">
+                <%= device.name %> · <%= pluralize(video.views, "view") %>
+              </p>
             </div>
-          </div>
+          <% end %>
         <% end %>
       </div>
+    <% else %>
+      <p class="text-muted small mt-2">No guides have been uploaded yet.</p>
     <% end %>
-  </div>
+  </section>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const outer = document.getElementById("recentlyAddedOuter");
+    const inner = document.getElementById("recentlyAddedInner");
+
+    if (!outer || !inner) return;
+
+    // Duplicate cards for seamless infinite scroll
+    inner.innerHTML += inner.innerHTML;
+
+    let isPaused = false;
+    let isDragging = false;
+    let startX = 0;
+    let startScroll = 0;
+
+    function step() {
+      if (!isPaused && !isDragging) {
+        outer.scrollLeft += 0.5; // pixels per frame
+        const halfWidth = inner.scrollWidth / 2;
+        if (outer.scrollLeft >= halfWidth) {
+          outer.scrollLeft -= halfWidth;
+        }
+      }
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+
+    function pause() {
+      isPaused = true;
+    }
+
+    function resume() {
+      isPaused = false;
+    }
+
+    outer.addEventListener("mouseenter", pause);
+    outer.addEventListener("mouseleave", function () {
+      if (!isDragging) resume();
+    });
+
+    outer.addEventListener("touchstart", function () {
+      isDragging = true;
+      pause();
+    }, { passive: true });
+
+    outer.addEventListener("touchend", function () {
+      isDragging = false;
+      resume();
+    });
+
+    outer.addEventListener("mousedown", function (e) {
+      isDragging = true;
+      pause();
+      startX = e.pageX;
+      startScroll = outer.scrollLeft;
+
+      function onMove(ev) {
+        const dx = ev.pageX - startX;
+        outer.scrollLeft = startScroll - dx;
+      }
+
+      function onUp() {
+        isDragging = false;
+        resume();
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseup", onUp);
+      }
+
+      document.addEventListener("mousemove", onMove);
+      document.addEventListener("mouseup", onUp);
+    });
+  });
+</script>

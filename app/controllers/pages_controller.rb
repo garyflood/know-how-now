@@ -5,11 +5,22 @@ class PagesController < ApplicationController
   end
 
   def explore
-    @categories = Category.order(:category_name)
+    # Recently added devices: devices that have a video, newest first
+    @recent_devices = Device.joins(:video)
+                            .includes(:video, :category)
+                            .order("videos.created_at DESC")
+                            .distinct
+                            .limit(12)
+
+    # Popular guides: videos ordered by views, including their device
+    @popular_videos = Video.includes(:device).order(views: :desc).limit(8)
   end
 
-  def explore_category
-    @category = Category.find(params[:id])
-    @devices = @category.devices.order(:name)
+  # Full list of recently added devices (linked from Explore \"View all\")
+  def explore_recent_devices
+    @recent_devices = Device.joins(:video)
+                            .includes(:video, :category)
+                            .order("videos.created_at DESC")
+                            .distinct
   end
 end
