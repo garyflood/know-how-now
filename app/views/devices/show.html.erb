@@ -113,7 +113,7 @@
 
 </div>
 
-<%# CSS ticker carousel — duplicate cards and set animation duration based on card count %>
+<%# CSS/JS ticker carousel — duplicate cards and drive smooth horizontal scroll %>
 <script>
   // Remove layout's inline padding-bottom so no gap appears below the page content
   const mainEl = document.querySelector("main");
@@ -129,21 +129,80 @@
     }, 3500);
   }
 
+  // Infinite auto-scrolling marquee for "Specify model/select a different model"
+  const outer = document.querySelector(".device-related-scroll");
   const inner = document.getElementById("carouselInner");
-  if (inner) {
-    // Duplicate the inner HTML for a seamless loop
+
+  if (outer && inner) {
+    // Duplicate cards once for seamless loop
     inner.innerHTML += inner.innerHTML;
 
-    // Set duration proportional to number of cards so speed stays consistent
-    const cardCount = inner.querySelectorAll(".device-related-card").length;
-    inner.style.animationDuration = (cardCount * 2.5) + "s";
+    let isPaused = false;
+    let isDragging = false;
+    let startX = 0;
+    let startScroll = 0;
 
-    // On card click: pause animation and show checkmark
+    function step() {
+      if (!isPaused && !isDragging) {
+        outer.scrollLeft += 0.5; // pixels per frame
+        const halfWidth = inner.scrollWidth / 2;
+        if (outer.scrollLeft >= halfWidth) {
+          outer.scrollLeft -= halfWidth;
+        }
+      }
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+
+    function pause() { isPaused = true; }
+    function resume() { isPaused = false; }
+
+    // Pause on hover (desktop)
+    outer.addEventListener("mouseenter", pause);
+    outer.addEventListener("mouseleave", function () {
+      if (!isDragging) resume();
+    });
+
+    // Touch: pause while finger is down, resume when released
+    outer.addEventListener("touchstart", function () {
+      isDragging = true;
+      pause();
+    }, { passive: true });
+
+    outer.addEventListener("touchend", function () {
+      isDragging = false;
+      resume();
+    });
+
+    // Mouse drag to manually swipe
+    outer.addEventListener("mousedown", function (e) {
+      isDragging = true;
+      pause();
+      outer.classList.add("dragging");
+      startX = e.pageX;
+      startScroll = outer.scrollLeft;
+
+      function onMove(ev) {
+        const dx = ev.pageX - startX;
+        outer.scrollLeft = startScroll - dx;
+      }
+
+      function onUp() {
+        isDragging = false;
+        outer.classList.remove("dragging");
+        resume();
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseup", onUp);
+      }
+
+      document.addEventListener("mousemove", onMove);
+      document.addEventListener("mouseup", onUp);
+    });
+
+    // Card click: keep existing "select model" behavior (active state + checkmark)
     inner.addEventListener("click", function (e) {
       const card = e.target.closest(".device-related-card");
       if (!card) return;
-
-      inner.classList.add("paused");
 
       inner.querySelectorAll(".device-related-card").forEach(function (c) {
         c.classList.remove("device-related-card--active");

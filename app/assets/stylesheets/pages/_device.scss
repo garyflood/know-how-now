@@ -378,28 +378,18 @@ main:has(.device-page) {
   }
 }
 
-/* Carousel outer — clips the moving inner track */
+/* Carousel outer — clips the moving inner track. Scrolled via JS for marquee effect. */
 .device-related-scroll {
-  overflow: hidden;
+  overflow-x: hidden;
   padding-bottom: 4px;
+  cursor: grab;
 }
 
-/* Keyframe: slide left by exactly 50% (one full set of cards) */
-@keyframes carousel-ticker {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* Inner track — flex row, CSS animated, cards duplicated by JS */
+/* Inner track — flex row, width grows with cards; JS scrolls parent horizontally */
 .device-carousel-inner {
   display: flex;
   gap: 12px;
   width: max-content;
-  animation: carousel-ticker 20s linear infinite;
-
-  &.paused {
-    animation-play-state: paused;
-  }
 
   /* button_to wraps content in <form> — hide it from flex layout */
   form {
