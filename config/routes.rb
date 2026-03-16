@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   end
   resources :bookmarks, only: [:create, :destroy, :index]
   get "explore", to: "pages#explore"
-  get "explore/category/:id", to: "pages#explore_category", as: :explore_category
+  get "explore/recent", to: "pages#explore_recent_devices", as: :explore_recent_devices
   get "profile", to: "users#show", as: :profile
   get "profile/uploads", to: "users#uploads", as: :profile_uploads
   get "profile/edit", to: "users#edit", as: :edit_profile

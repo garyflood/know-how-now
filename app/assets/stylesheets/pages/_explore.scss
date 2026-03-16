@@ -1,17 +1,96 @@
 // Explore page: category grid and category device list
-.explore-category-card {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+/* Explore page — search, recently added marquee, popular guides */
+.explore-page {
+  width: 100%;
+}
+
+.explore-header {
+  margin-bottom: 16px;
+}
+
+.explore-title {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.explore-search-group {
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.explore-search-icon {
+  background: #f3f4f6;
+  border: none;
+  color: #6b7280;
+}
+
+.explore-search-input {
+  border: none;
+  padding: 10px 14px;
+  font-size: 14px;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.explore-section {
+  margin-bottom: 24px;
+}
+
+.explore-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.explore-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.explore-section-link {
+  font-size: 13px;
+  color: #4ECDC4;
+  text-decoration: none;
+  font-weight: 600;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1) !important;
+    text-decoration: underline;
   }
 }
 
-.explore-category-card-img-wrapper {
-  aspect-ratio: 1;
+/* Recently Added marquee */
+.explore-marquee-outer {
+  overflow-x: hidden;
+  padding-bottom: 4px;
+}
+
+.explore-marquee-inner {
+  display: flex;
+  gap: 12px;
+}
+
+.explore-device-card {
+  flex: 0 0 180px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   overflow: hidden;
-  background: $light-gray;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.explore-device-image {
+  width: 100%;
+  height: 110px;
+  overflow: hidden;
+  background: #f3f4f6;
 
   img {
     width: 100%;
@@ -20,13 +99,42 @@
   }
 }
 
-.explore-category-icon {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
+.explore-device-meta {
+  padding: 8px 10px 10px;
+}
+
+.explore-device-name {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.explore-device-category {
+  display: block;
+  font-size: 12px;
+}
+
+/* Popular guides list */
+.explore-guides-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.explore-guide-card {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+  gap: 10px;
+}
+
+.explore-guide-thumb {
+  position: relative;
+  width: 120px;
+  height: 80px;
+  border-radius: 16px;
   overflow: hidden;
-  border-radius: 0.375rem;
-  background: $light-gray;
+  background: #000;
 
   img {
     width: 100%;
@@ -35,17 +143,66 @@
   }
 }
 
-.device-list-img {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
+.explore-guide-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.45));
+  color: white;
+
+  i {
+    font-size: 20px;
+  }
+}
+
+.explore-guide-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.explore-guide-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+/* Full list of recently added devices */
+.explore-recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.explore-recent-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb;
+  text-decoration: none;
+  color: inherit;
+}
+
+.explore-recent-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
   overflow: hidden;
-  border-radius: 0.375rem;
-  background: $light-gray;
+  background: #f3f4f6;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
+}
+
+.explore-recent-body {
+  flex: 1;
+  min-width: 0;
 }

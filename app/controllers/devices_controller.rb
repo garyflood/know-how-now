@@ -4,6 +4,7 @@ class DevicesController < ApplicationController
   def show
     @device = Device.find(params[:id])
     @device.increment!(:views)
+    @back_path = from_explore? ? explore_path : root_path
   end
 
   def manual
@@ -63,6 +64,14 @@ class DevicesController < ApplicationController
   end
 
   private
+
+  def from_explore?
+    return false if request.referer.blank?
+    uri = URI.parse(request.referer)
+    uri.path.start_with?("/explore")
+  rescue URI::InvalidURIError
+    false
+  end
 
   def device_params
     params.require(:device).permit(:name)

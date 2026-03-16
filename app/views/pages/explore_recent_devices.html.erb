@@ -1,0 +1,26 @@
+<%# Full list of recently added devices (from user uploads) %>
+<div class="explore-page">
+  <header class="explore-header">
+    <h1 class="explore-title">Recently Added Devices</h1>
+  </header>
+
+  <% if @recent_devices.any? %>
+    <div class="explore-recent-list">
+      <% @recent_devices.each do |device| %>
+        <%= link_to device_path(device), class: "explore-recent-item" do %>
+          <div class="explore-recent-img">
+            <%= device_image_tag(device, alt: device.name) %>
+          </div>
+          <div class="explore-recent-body">
+            <span class="explore-device-name"><%= device.name %></span>
+            <span class="explore-device-category text-muted small"><%= device.category&.category_name %></span>
+          </div>
+          <i class="fa-solid fa-chevron-right text-muted"></i>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-muted">No devices have been added yet.</p>
+  <% end %>
+</div>
+
