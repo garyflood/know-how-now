@@ -1,20 +1,7 @@
-<%# Explore page — search, recently added devices marquee, popular guides %>
+<%# Explore page — recently added devices marquee, popular guides %>
 <div class="explore-page">
   <header class="explore-header">
     <h1 class="explore-title">Explore</h1>
-
-    <%# Search bar — redirects to device detail on submit %>
-    <%= form_with url: explore_search_path, method: :get, local: true, html: { class: "explore-search-form" } do |f| %>
-      <div class="input-group explore-search-group">
-        <span class="input-group-text explore-search-icon">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </span>
-        <%= f.text_field :q,
-                         class: "form-control explore-search-input",
-                         placeholder: "Search Devices",
-                         autocomplete: "off" %>
-      </div>
-    <% end %>
   </header>
 
   <%# Recently Added Devices — horizontal marquee with auto-scroll %>
