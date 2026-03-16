@@ -7,6 +7,7 @@ class Video < ApplicationRecord
   validates :summary, presence: true
   validates :video_link, presence: true
   validates :views, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :device_id, uniqueness: { message: "already has a video" }
 
   def self.upload_video_to_cloudinary(uploaded_video)
     source = uploaded_video.is_a?(String) ? uploaded_video : StringIO.new(uploaded_video.read)

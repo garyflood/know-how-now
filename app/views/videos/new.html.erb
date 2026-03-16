@@ -24,6 +24,11 @@
   </div>
 
   <div>
+    <label for="device_images">Device Images (optional)</label>
+    <%= file_field_tag "device_images[]", accept: "image/*", multiple: true %>
+  </div>
+
+  <div>
     <%= f.label :summary %>
     <%= f.text_field :summary, placeholder: "Brief description of the video", required: true %>
   </div>

@@ -6,6 +6,13 @@ class UsersController < ApplicationController
     @user = current_user
   end
 
+  # My Uploads — full list of current user's videos, sortable
+  def uploads
+    @user = current_user
+    @sort = params[:sort] == "most_viewed" ? "most_viewed" : "latest"
+    @videos = @sort == "most_viewed" ? @user.videos.order(views: :desc) : @user.videos.order(created_at: :desc)
+  end
+
   # Edit profile form
   def edit
     @user = current_user
