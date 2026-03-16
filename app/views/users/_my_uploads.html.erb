@@ -1,0 +1,35 @@
+<%# My Uploads partial — shows the current user's uploaded videos %>
+<div class="profile-uploads-section">
+
+  <div class="profile-uploads-header">
+    <h3 class="profile-uploads-title">My Uploads</h3>
+    <%= link_to "See all", profile_uploads_path, class: "profile-see-all" %>
+  </div>
+
+  <% if user.videos.any? %>
+    <div class="profile-uploads-list">
+      <% user.videos.order(created_at: :desc).each do |video| %>
+        <%= link_to device_video_path(video.device, video), class: "profile-upload-card" do %>
+
+          <%# Thumbnail — use the device's first image %>
+          <div class="profile-upload-thumb">
+            <%= device_image_tag(video.device, class: "profile-upload-thumb-img", alt: video.device.name) %>
+          </div>
+
+          <%# Info: title, upload date, stats %>
+          <div class="profile-upload-info">
+            <p class="profile-upload-title"><%= video.summary %></p>
+            <p class="profile-upload-date">Uploaded <%= time_ago_in_words(video.created_at) %> ago</p>
+            <div class="profile-upload-stats">
+              <span><i class="fa-regular fa-eye"></i> <%= video.views >= 1000 ? "#{(video.views / 1000.0).round(1)}K" : video.views %></span>
+            </div>
+          </div>
+
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="profile-uploads-empty">No uploads yet.</p>
+  <% end %>
+
+</div>

@@ -14,6 +14,10 @@ class VideosController < ApplicationController
     Array(params[:device_images]).each do |image|
       url = Device.upload_image_to_cloudinary(image)
       device.append_image(url) if url
+    if device.video.present?
+      @video = Video.new
+      flash.now[:alert] = "#{device.name} already has a video."
+      return render :new, status: :unprocessable_entity
     end
 
     cloudinary_url = Video.upload_video_to_cloudinary(params[:video_file])
@@ -34,6 +38,8 @@ class VideosController < ApplicationController
   def show
     @device = Device.find(params[:device_id])
     @video = @device.video
+    @video.increment!(:views)
+    @bookmark = user_signed_in? ? current_user.bookmarks.find_by(device: @device) : nil
   end
 
   private

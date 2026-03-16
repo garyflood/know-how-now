@@ -1,0 +1,263 @@
+/* Video show page */
+
+body:has(.video-page) {
+  background: #f4f4f4;
+}
+
+main:has(.video-page) {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.video-page {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background: white;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  font-family: "Space Grotesk", sans-serif;
+  padding-bottom: 80px;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+
+.video-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 14px;
+}
+
+.video-back-link {
+  color: #1a1a2e;
+  font-size: 20px;
+  text-decoration: none;
+  width: 32px;
+
+  &:hover { color: #4ECDC4; }
+}
+
+.video-header-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.video-share-btn {
+  width: 32px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 18px;
+  color: #1a1a2e;
+  cursor: pointer;
+  text-align: right;
+
+  &:hover { color: #4ECDC4; }
+}
+
+/* ── Video player ────────────────────────────────────────────── */
+
+.video-player-wrapper {
+  width: 100%;
+  background: #000;
+}
+
+.video-player {
+  width: 100%;
+  display: block;
+  max-height: 260px;
+  object-fit: cover;
+}
+
+/* ── Info below player ───────────────────────────────────────── */
+
+.video-info {
+  padding: 16px 20px 12px;
+}
+
+/* Title row — title + bookmark side by side */
+.video-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.video-title {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Bookmark button — teal rounded square */
+.video-bookmark-btn {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  background: #e8faf9;
+  border: none;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  padding: 0;
+
+  i {
+    font-size: 17px;
+    color: #4ECDC4;
+  }
+
+  &:hover { background: #d0f5f2; }
+
+  /* Saved state — filled icon, slightly deeper background */
+  &--saved {
+    background: #4ECDC4;
+
+    i { color: white; }
+    &:hover { background: #3dbdb5; }
+  }
+}
+
+.video-meta {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+}
+
+/* ── Uploader card ───────────────────────────────────────────── */
+
+.video-uploader-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 16px 16px;
+  padding: 14px 16px;
+  background: #f8f9fa;
+  border-radius: 16px;
+}
+
+.video-uploader-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e6faf7, #d4f5ef);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.video-uploader-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-uploader-placeholder {
+  font-size: 20px;
+  color: #4ECDC4;
+}
+
+.video-uploader-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.video-uploader-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 2px;
+}
+
+.video-uploader-role {
+  font-size: 10px;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 0.6px;
+  margin: 0;
+}
+
+.video-view-uploads-btn {
+  padding: 10px 16px;
+  background: #4ECDC4;
+  color: white;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+
+  &:hover { opacity: 0.9; color: white; text-decoration: none; }
+}
+
+/* ── Brief Description accordion ────────────────────────────── */
+
+.video-description-section {
+  margin: 0 16px;
+  border: 1px solid #e9ecef;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.video-description-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: white;
+  border: none;
+  cursor: pointer;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a2e;
+
+  &:hover { background: #fafafa; }
+}
+
+.video-description-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  i { color: #4ECDC4; font-size: 16px; }
+}
+
+.video-description-chevron {
+  color: #888;
+  font-size: 13px;
+  transition: transform 0.25s ease;
+}
+
+/* Hidden by default — toggled open by JS */
+.video-description-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+
+  &--open {
+    max-height: 400px;
+  }
+}
+
+.video-description-text {
+  padding: 0 16px 16px;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
