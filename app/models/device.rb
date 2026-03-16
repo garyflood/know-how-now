@@ -61,7 +61,7 @@ class Device < ApplicationRecord
   def append_image(cloudinary_url)
     return if cloudinary_url.blank?
 
-    update_column(:images, (images + [cloudinary_url]).uniq)
+    update_column(:images, ((images || []) + [cloudinary_url]).uniq)
   end
 
   private
