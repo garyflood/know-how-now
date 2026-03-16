@@ -94,6 +94,12 @@ main:has(.video-page) {
   color: #1a1a2e;
   margin: 0;
   line-height: 1.3;
+  text-decoration: none;
+
+  &:hover {
+    color: #4ECDC4;
+    text-decoration: none;
+  }
 }
 
 /* Bookmark button — teal rounded square */

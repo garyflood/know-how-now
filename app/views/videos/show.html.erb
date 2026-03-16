@@ -32,7 +32,9 @@
   <%# Title + meta + bookmark below player %>
   <div class="video-info">
     <div class="video-title-row">
-      <h2 class="video-title"><%= @video.summary %></h2>
+      <%= link_to device_path(@device), class: "video-title" do %>
+        <%= @device.name %>
+      <% end %>
 
       <%# Bookmark button — saves/unsaves the device %>
       <% if @bookmark %>
@@ -62,33 +64,37 @@
 
   <%# Uploader card %>
   <div class="video-uploader-card">
-    <div class="video-uploader-avatar">
+    <%= link_to contributor_path(@video.user), class: "video-uploader-avatar" do %>
       <% if @video.user.picture.present? %>
         <%= image_tag @video.user.picture, class: "video-uploader-img", alt: @video.user.full_name %>
       <% else %>
         <i class="fa-solid fa-user video-uploader-placeholder"></i>
       <% end %>
-    </div>
+    <% end %>
     <div class="video-uploader-info">
       <p class="video-uploader-name"><%= @video.user.full_name || @video.user.username %></p>
       <p class="video-uploader-role">VIDEO CONTRIBUTOR</p>
     </div>
-    <%= link_to profile_path, class: "video-view-uploads-btn" do %>
+    <%= link_to contributor_path(@video.user), class: "video-view-uploads-btn" do %>
       View Uploads
     <% end %>
   </div>
 
   <%# Brief Description — collapsible accordion %>
   <div class="video-description-section" id="descSection">
-    <button class="video-description-toggle" id="descToggle" aria-expanded="false">
+    <button class="video-description-toggle" id="descToggle" aria-expanded="true">
       <span class="video-description-toggle-left">
         <i class="fa-regular fa-file-lines"></i>
         <span>Brief Description</span>
       </span>
-      <i class="fa-solid fa-chevron-down video-description-chevron" id="descChevron"></i>
+      <i class="fa-solid fa-chevron-down video-description-chevron" id="descChevron" style="transform: rotate(180deg);"></i>
     </button>
-    <div class="video-description-body" id="descBody">
-      <p class="video-description-text"><%= @video.summary %></p>
+    <div class="video-description-body video-description-body--open" id="descBody">
+      <% if @video.summary.present? %>
+        <p class="video-description-text"><%= @video.summary %></p>
+      <% else %>
+        <p class="video-description-text" style="color:#aaa;">No description available.</p>
+      <% end %>
     </div>
   </div>
 
