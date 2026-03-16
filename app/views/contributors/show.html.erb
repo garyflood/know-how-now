@@ -1,0 +1,140 @@
+<%# Public contributor profile — video index page %>
+<% content_for :title, "#{@contributor.full_name || @contributor.username} — Contributor" %>
+
+<div class="contributor-page">
+
+  <%# Header: back arrow + name + share %>
+  <div class="contributor-header">
+    <a href="#" class="contributor-back-link" onclick="history.back(); return false;" aria-label="Go back">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <h1 class="contributor-header-name"><%= @contributor.full_name || @contributor.username %></h1>
+    <button class="contributor-share-btn" id="contributorShareBtn" aria-label="Share">
+      <i class="fa-solid fa-share-nodes"></i>
+    </button>
+  </div>
+
+  <%# Avatar + name + badge %>
+  <div class="contributor-profile-section">
+    <div class="contributor-avatar-ring">
+      <div class="contributor-avatar">
+        <% if @contributor.picture.present? %>
+          <%= image_tag @contributor.picture, class: "contributor-avatar-img", alt: @contributor.full_name %>
+        <% else %>
+          <i class="fa-solid fa-user contributor-avatar-placeholder"></i>
+        <% end %>
+      </div>
+    </div>
+    <h2 class="contributor-name"><%= @contributor.full_name || @contributor.username %></h2>
+    <span class="contributor-badge">Contributor</span>
+  </div>
+
+  <%# Stats: Views + Videos %>
+  <div class="contributor-stats">
+    <div class="contributor-stat">
+      <span class="contributor-stat-value">
+        <%= @total_views >= 1000 ? "#{(@total_views / 1000.0).round(1)}K" : @total_views %>
+      </span>
+      <span class="contributor-stat-label">VIEWS</span>
+    </div>
+    <div class="contributor-stat-divider"></div>
+    <div class="contributor-stat">
+      <span class="contributor-stat-value"><%= @contributor.videos.count %></span>
+      <span class="contributor-stat-label">VIDEOS</span>
+    </div>
+  </div>
+
+  <%# Tab bar %>
+  <div class="contributor-tabs">
+    <%= link_to contributor_path(@contributor),
+          class: "contributor-tab #{'contributor-tab--active' if @tab == 'all'}" do %>
+      All Videos
+    <% end %>
+    <%= link_to contributor_path(@contributor, tab: "most_popular"),
+          class: "contributor-tab #{'contributor-tab--active' if @tab == 'most_popular'}" do %>
+      Most Popular
+    <% end %>
+  </div>
+
+  <%# 2-column video grid %>
+  <div class="contributor-grid">
+    <% if @videos.any? %>
+      <% @videos.each do |video| %>
+        <%= link_to device_video_path(video.device, video), class: "contributor-video-card" do %>
+
+          <%# Thumbnail with play + views overlay %>
+          <div class="contributor-video-thumb">
+            <%= device_image_tag(video.device, class: "contributor-video-thumb-img", alt: video.device.name) %>
+            <div class="contributor-video-overlay">
+              <div class="contributor-play-icon">
+                <i class="fa-solid fa-play"></i>
+              </div>
+              <span class="contributor-view-badge">
+                <i class="fa-regular fa-eye"></i>
+                <%= video.views >= 1000 ? "#{(video.views / 1000.0).round(1)}K" : video.views %>
+              </span>
+            </div>
+          </div>
+
+          <%# Title %>
+          <p class="contributor-video-title"><%= video.summary %></p>
+
+        <% end %>
+      <% end %>
+    <% else %>
+      <div class="contributor-empty">
+        <i class="fa-regular fa-video contributor-empty-icon"></i>
+        <p>No videos uploaded yet.</p>
+      </div>
+    <% end %>
+  </div>
+
+</div>
+
+<script>
+  // Share button — Web Share API with clipboard fallback
+  const shareBtn = document.getElementById("contributorShareBtn");
+
+  function showShareToast() {
+    let toast = document.getElementById("contributorShareToast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "contributorShareToast";
+      toast.style.cssText = "position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:white;padding:10px 20px;border-radius:50px;font-size:13px;font-weight:600;z-index:9999;font-family:'Space Grotesk',sans-serif;";
+      document.body.appendChild(toast);
+    }
+    toast.textContent = "Link copied!";
+    toast.style.display = "block";
+    setTimeout(function () { toast.style.display = "none"; }, 2500);
+  }
+
+  function copyContributorUrl() {
+    const url = window.location.href;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(showShareToast).catch(function () { fallbackCopy(url); });
+    } else {
+      fallbackCopy(url);
+    }
+  }
+
+  function fallbackCopy(url) {
+    const el = document.createElement("textarea");
+    el.value = url;
+    el.style.cssText = "position:fixed;top:-9999px;left:-9999px;";
+    document.body.appendChild(el);
+    el.focus();
+    el.select();
+    try { document.execCommand("copy"); showShareToast(); } catch (e) {}
+    document.body.removeChild(el);
+  }
+
+  if (shareBtn) {
+    shareBtn.addEventListener("click", function () {
+      if (navigator.share) {
+        navigator.share({ title: document.title, url: window.location.href }).catch(function () {});
+      } else {
+        copyContributorUrl();
+      }
+    });
+  }
+</script>

@@ -62,18 +62,18 @@
 
   <%# Uploader card %>
   <div class="video-uploader-card">
-    <div class="video-uploader-avatar">
+    <%= link_to contributor_path(@video.user), class: "video-uploader-avatar" do %>
       <% if @video.user.picture.present? %>
         <%= image_tag @video.user.picture, class: "video-uploader-img", alt: @video.user.full_name %>
       <% else %>
         <i class="fa-solid fa-user video-uploader-placeholder"></i>
       <% end %>
-    </div>
+    <% end %>
     <div class="video-uploader-info">
       <p class="video-uploader-name"><%= @video.user.full_name || @video.user.username %></p>
       <p class="video-uploader-role">VIDEO CONTRIBUTOR</p>
     </div>
-    <%= link_to profile_path, class: "video-view-uploads-btn" do %>
+    <%= link_to contributor_path(@video.user), class: "video-view-uploads-btn" do %>
       View Uploads
     <% end %>
   </div>
