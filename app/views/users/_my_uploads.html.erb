@@ -3,7 +3,7 @@
 
   <div class="profile-uploads-header">
     <h3 class="profile-uploads-title">My Uploads</h3>
-    <%= link_to "See all", "#", class: "profile-see-all" %>
+    <%= link_to "See all", profile_uploads_path, class: "profile-see-all" %>
   </div>
 
   <% if user.videos.any? %>

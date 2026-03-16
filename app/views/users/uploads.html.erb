@@ -1,0 +1,86 @@
+<%# My Uploads page — full list of the user's videos %>
+<% content_for :title, "My Uploads" %>
+
+<div class="uploads-page">
+
+  <%# Header %>
+  <div class="uploads-header">
+    <%= link_to profile_path, class: "uploads-back-link" do %>
+      <i class="fa-solid fa-arrow-left"></i>
+    <% end %>
+    <h1 class="uploads-title">My Uploads</h1>
+    <%# Spacer keeps title centered %>
+    <span class="uploads-header-spacer"></span>
+  </div>
+
+  <%# Search bar — JS filters the list client-side %>
+  <div class="uploads-search-wrapper">
+    <i class="fa-solid fa-magnifying-glass uploads-search-icon"></i>
+    <input
+      type="text"
+      id="uploadsSearch"
+      class="uploads-search-input"
+      placeholder="Search your videos..."
+      autocomplete="off"
+    >
+  </div>
+
+  <%# Sort tabs — Latest / Most Viewed %>
+  <div class="uploads-tabs">
+    <%= link_to "Latest", profile_uploads_path,
+          class: "uploads-tab #{'uploads-tab--active' if @sort == 'latest'}" %>
+    <%= link_to "Most Viewed", profile_uploads_path(sort: "most_viewed"),
+          class: "uploads-tab #{'uploads-tab--active' if @sort == 'most_viewed'}" %>
+  </div>
+
+  <%# Video list %>
+  <div class="uploads-list" id="uploadsList">
+    <% if @videos.any? %>
+      <% @videos.each do |video| %>
+        <%= link_to device_video_path(video.device, video),
+              class: "uploads-card",
+              data: { title: video.summary.downcase } do %>
+
+          <%# Thumbnail %>
+          <div class="uploads-thumb">
+            <%= device_image_tag(video.device, class: "uploads-thumb-img", alt: video.device.name) %>
+          </div>
+
+          <%# Info %>
+          <div class="uploads-info">
+            <p class="uploads-video-title"><%= video.summary %></p>
+            <p class="uploads-video-date">Uploaded <%= time_ago_in_words(video.created_at) %> ago</p>
+            <div class="uploads-video-stats">
+              <span><i class="fa-regular fa-eye"></i> <%= video.views >= 1000 ? "#{(video.views / 1000.0).round(1)}K" : video.views %></span>
+            </div>
+          </div>
+
+        <% end %>
+      <% end %>
+    <% else %>
+      <p class="uploads-empty">No uploads yet.</p>
+    <% end %>
+  </div>
+
+  <%# Floating upload button %>
+  <%= link_to new_user_video_path(current_user), class: "uploads-fab" do %>
+    <i class="fa-solid fa-plus"></i>
+  <% end %>
+
+</div>
+
+<%# Client-side search filter %>
+<script>
+  const searchInput = document.getElementById("uploadsSearch");
+  const list = document.getElementById("uploadsList");
+
+  if (searchInput && list) {
+    searchInput.addEventListener("input", function () {
+      const query = this.value.toLowerCase().trim();
+      list.querySelectorAll(".uploads-card").forEach(function (card) {
+        const title = card.dataset.title || "";
+        card.style.display = title.includes(query) ? "" : "none";
+      });
+    });
+  }
+</script>
