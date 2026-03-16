@@ -11,6 +11,12 @@ class VideosController < ApplicationController
   def create
     device, _status = Device.find_or_create_from_name(params[:device_name])
 
+    if device.video.present?
+      @video = Video.new
+      flash.now[:alert] = "#{device.name} already has a video."
+      return render :new, status: :unprocessable_entity
+    end
+
     cloudinary_url = Video.upload_video_to_cloudinary(params[:video_file])
     raise "Video upload failed. Please try again." if cloudinary_url.nil?
 
