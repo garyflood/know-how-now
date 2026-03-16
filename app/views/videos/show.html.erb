@@ -1,10 +1,162 @@
-<h1><%= @device.name %> — Video Guide</h1>
+<%# Video show page — matches Know-How UI design %>
+<% content_for :title, "Video Instruction" %>
 
-<p><%= @video.summary %></p>
+<div class="video-page">
 
-<video controls width="100%">
-  <source src="<%= @video.video_link %>" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+  <%# Header: back arrow + title + share icon %>
+  <div class="video-header">
+    <%= link_to device_path(@device), class: "video-back-link" do %>
+      <i class="fa-solid fa-arrow-left"></i>
+    <% end %>
+    <h1 class="video-header-title">Video Instruction</h1>
+    <%# Share icon — uses Web Share API if available, otherwise copies URL %>
+    <button class="video-share-btn" id="shareBtn" aria-label="Share">
+      <i class="fa-solid fa-share-nodes"></i>
+    </button>
+  </div>
 
-<%= link_to "Back to Device", device_path(@device) %>
+  <%# Video player — native HTML5 player with the Cloudinary URL %>
+  <div class="video-player-wrapper">
+    <video
+      class="video-player"
+      controls
+      playsinline
+      preload="metadata"
+      poster="<%= @device.images.first.presence || '' %>"
+    >
+      <source src="<%= @video.video_link %>" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <%# Title + meta + bookmark below player %>
+  <div class="video-info">
+    <div class="video-title-row">
+      <h2 class="video-title"><%= @video.summary %></h2>
+
+      <%# Bookmark button — saves/unsaves the device %>
+      <% if @bookmark %>
+        <%= button_to bookmark_path(@bookmark), method: :delete,
+              class: "video-bookmark-btn video-bookmark-btn--saved",
+              title: "Remove bookmark",
+              form: { data: { turbo: false } } do %>
+          <i class="fa-solid fa-bookmark"></i>
+        <% end %>
+      <% else %>
+        <%= button_to bookmarks_path, method: :post,
+              params: { device_id: @device.id },
+              class: "video-bookmark-btn",
+              title: "Save device",
+              form: { data: { turbo: false } } do %>
+          <i class="fa-regular fa-bookmark"></i>
+        <% end %>
+      <% end %>
+    </div>
+
+    <p class="video-meta">
+      <%= @video.views >= 1000 ? "#{(@video.views / 1000.0).round(1)}K" : @video.views %> views
+      &bull;
+      <%= time_ago_in_words(@video.created_at) %> ago
+    </p>
+  </div>
+
+  <%# Uploader card %>
+  <div class="video-uploader-card">
+    <div class="video-uploader-avatar">
+      <% if @video.user.picture.present? %>
+        <%= image_tag @video.user.picture, class: "video-uploader-img", alt: @video.user.full_name %>
+      <% else %>
+        <i class="fa-solid fa-user video-uploader-placeholder"></i>
+      <% end %>
+    </div>
+    <div class="video-uploader-info">
+      <p class="video-uploader-name"><%= @video.user.full_name || @video.user.username %></p>
+      <p class="video-uploader-role">VIDEO CONTRIBUTOR</p>
+    </div>
+    <%= link_to profile_path, class: "video-view-uploads-btn" do %>
+      View Uploads
+    <% end %>
+  </div>
+
+  <%# Brief Description — collapsible accordion %>
+  <div class="video-description-section" id="descSection">
+    <button class="video-description-toggle" id="descToggle" aria-expanded="false">
+      <span class="video-description-toggle-left">
+        <i class="fa-regular fa-file-lines"></i>
+        <span>Brief Description</span>
+      </span>
+      <i class="fa-solid fa-chevron-down video-description-chevron" id="descChevron"></i>
+    </button>
+    <div class="video-description-body" id="descBody">
+      <p class="video-description-text"><%= @video.summary %></p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Remove layout's inline padding-bottom
+  const mainEl = document.querySelector("main");
+  if (mainEl) mainEl.style.paddingBottom = "0";
+
+  // Collapsible description
+  const toggle = document.getElementById("descToggle");
+  const body   = document.getElementById("descBody");
+  const chevron = document.getElementById("descChevron");
+
+  if (toggle && body) {
+    toggle.addEventListener("click", function () {
+      const isOpen = body.classList.toggle("video-description-body--open");
+      chevron.style.transform = isOpen ? "rotate(180deg)" : "rotate(0deg)";
+      toggle.setAttribute("aria-expanded", isOpen);
+    });
+  }
+
+  // Share button — Web Share API with clipboard fallback
+  const shareBtn = document.getElementById("shareBtn");
+
+  function showShareToast() {
+    let toast = document.getElementById("shareToast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "shareToast";
+      toast.style.cssText = "position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:white;padding:10px 20px;border-radius:50px;font-size:13px;font-weight:600;z-index:9999;font-family:'Space Grotesk',sans-serif;";
+      document.body.appendChild(toast);
+    }
+    toast.textContent = "Link copied!";
+    toast.style.display = "block";
+    setTimeout(function () { toast.style.display = "none"; }, 2500);
+  }
+
+  function copyUrl() {
+    const url = window.location.href;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(showShareToast).catch(function () {
+        fallbackCopy(url);
+      });
+    } else {
+      fallbackCopy(url);
+    }
+  }
+
+  function fallbackCopy(url) {
+    const el = document.createElement("textarea");
+    el.value = url;
+    el.style.cssText = "position:fixed;top:-9999px;left:-9999px;";
+    document.body.appendChild(el);
+    el.focus();
+    el.select();
+    try { document.execCommand("copy"); showShareToast(); } catch (e) {}
+    document.body.removeChild(el);
+  }
+
+  if (shareBtn) {
+    shareBtn.addEventListener("click", function () {
+      if (navigator.share) {
+        navigator.share({ title: document.title, url: window.location.href }).catch(function () {});
+      } else {
+        copyUrl();
+      }
+    });
+  }
+</script>

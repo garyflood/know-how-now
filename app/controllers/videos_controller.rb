@@ -30,6 +30,7 @@ class VideosController < ApplicationController
     @device = Device.find(params[:device_id])
     @video = @device.video
     @video.increment!(:views)
+    @bookmark = user_signed_in? ? current_user.bookmarks.find_by(device: @device) : nil
   end
 
   private
