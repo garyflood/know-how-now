@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get "explore", to: "pages#explore"
   get "explore/category/:id", to: "pages#explore_category", as: :explore_category
   get "profile", to: "users#show", as: :profile
+  get "profile/uploads", to: "users#uploads", as: :profile_uploads
   get "profile/edit", to: "users#edit", as: :edit_profile
   patch "profile", to: "users#update"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
