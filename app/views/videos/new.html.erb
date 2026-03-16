@@ -1,38 +1,136 @@
-<h1>Upload Video</h1>
+<%# Creator Submission — video upload form %>
+<% content_for :title, "Creator Submission" %>
 
-<%= form_with url: user_videos_path(current_user), scope: :video, method: :post, html: { multipart: true } do |f| %>
-  <% if @video.errors.any? %>
-    <div>
-      <% @video.errors.full_messages.each do |msg| %>
-        <p><%= msg %></p>
-      <% end %>
+<div class="upload-page">
+
+  <%# Header: back arrow + title %>
+  <div class="upload-header">
+    <%= link_to profile_path, class: "upload-back-link" do %>
+      <i class="fa-solid fa-arrow-left"></i>
+    <% end %>
+    <h1 class="upload-header-title">Creator Submission</h1>
+    <span class="upload-header-spacer"></span>
+  </div>
+
+  <%= form_with url: user_videos_path(current_user), scope: :video, method: :post,
+        html: { multipart: true, class: "upload-form" } do |f| %>
+
+    <%# Validation errors %>
+    <% if @video.errors.any? %>
+      <div class="upload-errors">
+        <% @video.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if flash[:alert].present? %>
+      <div class="upload-errors">
+        <p><%= flash[:alert] %></p>
+      </div>
+    <% end %>
+
+    <%# ── Section 1: Confirm Device Model ── %>
+    <div class="upload-section">
+      <h2 class="upload-section-title">Confirm Device Model</h2>
+      <div class="upload-field">
+        <label class="upload-label" for="device_name">Model Name</label>
+        <div class="upload-input-wrapper">
+          <%= text_field_tag :device_name, params[:device_name],
+                id: "device_name",
+                placeholder: "e.g. Sony WH-1000XM5",
+                required: true,
+                class: "upload-input" %>
+          <i class="fa-regular fa-circle-check upload-input-check" id="deviceNameCheck"></i>
+        </div>
+        <p class="upload-hint">Ensure the model name exactly matches the label on your device or its original packaging.</p>
+      </div>
     </div>
+
+    <%# ── Section 2: Upload Device Photo ── %>
+    <div class="upload-section">
+      <h2 class="upload-section-title">Upload Device Photo</h2>
+      <p class="upload-section-desc">Please take clear, well-lit photos of the physical device (at least one) you will be featuring in the manual. This helps us verify the version.</p>
+
+      <label class="upload-dropzone" for="device_images">
+        <div class="upload-dropzone-icon">
+          <i class="fa-solid fa-camera"></i>
+        </div>
+        <p class="upload-dropzone-title">Tap to upload photos</p>
+        <p class="upload-dropzone-sub">JPG, PNG up to 2MB</p>
+        <%= file_field_tag "device_images[]", accept: "image/*", multiple: true,
+              class: "upload-file-input", id: "device_images" %>
+      </label>
+
+      <div class="upload-tips">
+        <div class="upload-tip">
+          <i class="fa-solid fa-sun"></i>
+          <span>Good lighting, no glare</span>
+        </div>
+        <div class="upload-tip">
+          <i class="fa-solid fa-bullseye"></i>
+          <span>Sharp focus on branding</span>
+        </div>
+      </div>
+    </div>
+
+    <%# ── Section 3: Upload Video ── %>
+    <div class="upload-section">
+      <h2 class="upload-section-title">Upload Video</h2>
+      <p class="upload-section-desc">Upload your high-quality video tutorial and the corresponding summary.</p>
+
+      <label class="upload-dropzone" for="video_file">
+        <div class="upload-dropzone-icon">
+          <i class="fa-regular fa-video"></i>
+        </div>
+        <p class="upload-dropzone-title">Upload Video</p>
+        <p class="upload-dropzone-sub">MP4, MOV up to 500MB</p>
+        <%= file_field_tag :video_file, accept: "video/*", required: true,
+              class: "upload-file-input", id: "video_file" %>
+      </label>
+
+      <%= f.text_area :summary,
+            placeholder: "Add Device Summary ...",
+            class: "upload-summary",
+            rows: 4 %>
+    </div>
+
+    <%# ── Submit ── %>
+    <div class="upload-submit-wrapper">
+      <%= f.submit "Upload", class: "upload-submit-btn" %>
+    </div>
+
   <% end %>
+</div>
 
-  <% if flash[:alert].present? %>
-    <p><%= flash[:alert] %></p>
-  <% end %>
+<script>
+  // Show teal checkmark when device name field has content
+  const deviceInput = document.getElementById("device_name");
+  const deviceCheck = document.getElementById("deviceNameCheck");
 
-  <div>
-    <label for="device_name">Device Name</label>
-    <%= text_field_tag :device_name, params[:device_name], placeholder: "e.g. Samsung Galaxy S21", required: true %>
-  </div>
+  function updateCheck() {
+    if (deviceInput && deviceCheck) {
+      deviceCheck.style.color = deviceInput.value.trim().length > 0 ? "#4ECDC4" : "#ccc";
+    }
+  }
 
-  <div>
-    <label for="video_file">Video File</label>
-    <%= file_field_tag :video_file, accept: "video/*", required: true %>
-  </div>
+  if (deviceInput) {
+    deviceInput.addEventListener("input", updateCheck);
+    updateCheck();
+  }
 
-  <div>
-    <label for="device_images">Device Images (optional)</label>
-    <%= file_field_tag "device_images[]", accept: "image/*", multiple: true %>
-  </div>
-
-  <div>
-    <%= f.label :summary %>
-    <%= f.text_field :summary, placeholder: "Brief description of the video", required: true %>
-  </div>
-
-
-  <%= f.submit "Upload Video" %>
-<% end %>
+  // Show selected filename inside each dropzone
+  document.querySelectorAll(".upload-dropzone").forEach(function(zone) {
+    const input = zone.querySelector(".upload-file-input");
+    const subText = zone.querySelector(".upload-dropzone-sub");
+    if (input && subText) {
+      input.addEventListener("change", function() {
+        if (input.files && input.files.length > 0) {
+          const names = Array.from(input.files).map(function(f) { return f.name; });
+          subText.textContent = names.join(", ");
+          subText.style.color = "#4ECDC4";
+        }
+      });
+    }
+  });
+</script>
