@@ -14,6 +14,8 @@ class VideosController < ApplicationController
     Array(params[:device_images]).each do |image|
       url = Device.upload_image_to_cloudinary(image)
       device.append_image(url) if url
+    end
+
     if device.video.present?
       @video = Video.new
       flash.now[:alert] = "#{device.name} already has a video."
