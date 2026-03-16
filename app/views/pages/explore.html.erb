@@ -45,7 +45,7 @@
         <% @popular_videos.each do |video| %>
           <% device = video.device %>
           <% next unless device %>
-          <%= link_to device_path(device), class: "explore-guide-card" do %>
+          <%= link_to device_video_path(device, video), class: "explore-guide-card" do %>
             <div class="explore-guide-thumb">
               <%= device_image_tag(device, alt: device.name) %>
               <div class="explore-guide-play">
