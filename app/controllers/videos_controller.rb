@@ -23,6 +23,8 @@ class VideosController < ApplicationController
     end
   rescue StandardError => e
     flash.now[:alert] = e.message
+    # Ensure @video is present so the form can render validation errors safely
+    @video ||= Video.new
     render :new, status: :unprocessable_entity
   end
 
