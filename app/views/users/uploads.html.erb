@@ -39,7 +39,7 @@
       <% @videos.each do |video| %>
         <%= link_to device_video_path(video.device, video),
               class: "uploads-card",
-              data: { title: video.summary.downcase } do %>
+              data: { title: video.device.name.downcase } do %>
 
           <%# Thumbnail %>
           <div class="uploads-thumb">
@@ -48,7 +48,7 @@
 
           <%# Info %>
           <div class="uploads-info">
-            <p class="uploads-video-title"><%= video.summary %></p>
+            <p class="uploads-video-title"><%= video.device.name %></p>
             <p class="uploads-video-date">Uploaded <%= time_ago_in_words(video.created_at) %> ago</p>
             <div class="uploads-video-stats">
               <span><i class="fa-regular fa-eye"></i> <%= video.views >= 1000 ? "#{(video.views / 1000.0).round(1)}K" : video.views %></span>
