@@ -18,7 +18,7 @@
 
           <%# Info: title, upload date, stats %>
           <div class="profile-upload-info">
-            <p class="profile-upload-title"><%= video.summary %></p>
+            <p class="profile-upload-title"><%= video.device.name %></p>
             <p class="profile-upload-date">Uploaded <%= time_ago_in_words(video.created_at) %> ago</p>
             <div class="profile-upload-stats">
               <span><i class="fa-regular fa-eye"></i> <%= video.views >= 1000 ? "#{(video.views / 1000.0).round(1)}K" : video.views %></span>
