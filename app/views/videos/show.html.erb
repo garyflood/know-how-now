@@ -60,25 +60,9 @@
       &bull;
       <%= time_ago_in_words(@video.created_at) %> ago
     </p>
-    <p class="video-device-row">
-      <%= link_to @device.name, device_path(@device, from: params[:from]), class: "video-device-link" %>
-    </p>
   </div>
 
   <%# Read Manual — same style as Device Detail page %>
-  <div class="video-actions">
-    <%= link_to manual_device_path(@device), class: "btn device-btn-manual video-read-manual-btn" do %>
-      <div class="device-btn-icon">
-        <i class="fa-solid fa-book-open"></i>
-      </div>
-      <div class="device-btn-label">
-        <span>Read Manual</span>
-        <span class="device-btn-status device-btn-status--available">
-          <span class="device-btn-dot"></span><span>Available</span>
-        </span>
-      </div>
-    <% end %>
-  </div>
 
   <%# Uploader card %>
   <div class="video-uploader-card">
@@ -114,6 +98,19 @@
         <p class="video-description-text" style="color:#aaa;">No description available.</p>
       <% end %>
     </div>
+  </div>
+    <div class="video-actions">
+    <%= link_to manual_device_path(@device), class: "btn device-btn-manual video-read-manual-btn" do %>
+      <div class="device-btn-icon">
+        <i class="fa-solid fa-book-open"></i>
+      </div>
+      <div class="device-btn-label">
+        <span>Read Manual</span>
+        <span class="device-btn-status device-btn-status--available">
+          <span class="device-btn-dot"></span><span>Available</span>
+        </span>
+      </div>
+    <% end %>
   </div>
 
 </div>
