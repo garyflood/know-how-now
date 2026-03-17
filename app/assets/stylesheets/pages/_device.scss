@@ -632,29 +632,336 @@ main:has(.device-page) {
   }
 }
 
-/* ── Manual page (manual.html.erb) ───────────────────────────── */
+/* ══════════════════════════════════════════════════════════════
+   Manual page redesign (manual.html.erb)
+   ══════════════════════════════════════════════════════════════ */
 
-.device-manual {
-  padding: 8px 20px 20px;
-  flex: 1;
+/* Override background for the manual page */
+.device-page--manual {
+  background: white;
+}
 
-  h1, h2, h3 {
+body:has(.device-page--manual) {
+  background: white;
+}
+
+/* ── Full-width hero ─────────────────────────────────────────── */
+
+.device-manual-hero {
+  position: relative;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.device-manual-hero-img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+  border-radius: 0;
+}
+
+.device-manual-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+/* ── Intro card ──────────────────────────────────────────────── */
+
+.device-manual-intro {
+  background: white;
+  padding: 22px 20px 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.device-manual-intro-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4ECDC4;
+  letter-spacing: 0.6px;
+  text-transform: capitalize;
+  margin-bottom: 6px;
+}
+
+.device-manual-intro-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 8px;
+  line-height: 1.2;
+}
+
+.device-manual-intro-subtitle {
+  font-size: 14px;
+  color: #888;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ── Markdown body — numbered step layout ────────────────────── */
+
+.device-manual-body {
+  background: #f7f8fa;
+  padding: 8px 16px 28px;
+
+  /* Each section card — wraps one h2 + its content */
+  .manual-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 18px 18px 14px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    position: relative;
+
+    /* Fade-in from below — JS adds .is-visible when card enters viewport */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Vertical line — only on cards with numbered steps (JS adds .has-timeline).
+     --timeline-top is set by JS to align with the center of the first circle. */
+  .manual-card.has-timeline::before {
+    content: "";
+    position: absolute;
+    left: 35px; /* card padding (18px) + half circle (17px) */
+    top: var(--timeline-top, 52px);
+    bottom: var(--timeline-bottom, 14px);
+    width: 1px;
+    background: linear-gradient(to bottom, #e0e0e0 0%, #e0e0e0 85%, transparent 100%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* h2 = card title — no numbering, sits above the timeline */
+  h2 {
     font-size: 16px;
     font-weight: 700;
     color: #1a1a2e;
-    margin-bottom: 8px;
+    margin: 0 0 14px;
+    line-height: 1.3;
+    position: relative;
+    z-index: 1;
   }
 
+  /* Bold step headings detected by JS — numbered circle via data-step attr */
+  .manual-step-heading {
+    position: relative;
+    padding-left: 50px;
+    min-height: 34px;
+    margin: 0 0 16px;
+    z-index: 1;
+    display: block;
+
+    &::before {
+      content: attr(data-step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #e4f7f6;
+      color: #4ECDC4;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: "Space Grotesk", sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+  }
+
+  /* h3 = sub-sections inside card — flush, no indent */
+  h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 14px 0 6px;
+    padding-left: 0;
+    line-height: 1.4;
+  }
+
+  /* All paragraphs — flush, no indent */
   p {
     font-size: 14px;
-    color: #444;
-    line-height: 1.6;
+    color: #555;
+    line-height: 1.7;
+    margin: 0 0 10px;
   }
 
-  ol, ul {
-    padding-left: 20px;
-    font-size: 14px;
-    color: #444;
-    line-height: 1.8;
+  /* Blockquotes — strip all default styling including browser margin-left */
+  blockquote {
+    margin: 0 0 10px 0;
+    padding: 0;
+    border-left: none;
+
+    p { margin-bottom: 6px; }
+  }
+
+  /* Ordered lists */
+  ol {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px;
+  }
+
+  /* Step-title lists (JS-marked) — numbered circles */
+  ol.manual-step-list {
+    > li {
+      position: relative;
+      padding-left: 50px;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.65;
+      margin-bottom: 16px;
+      z-index: 1;
+
+      &::before {
+        content: attr(data-step);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #e4f7f6;
+        color: #4ECDC4;
+        font-size: 13px;
+        font-weight: 700;
+        font-family: "Space Grotesk", sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+      }
+
+      ul, ol {
+        margin-top: 8px;
+        padding-left: 0;
+        li { padding-left: 0; margin-bottom: 6px; }
+      }
+    }
+  }
+
+  /* Plain sub-step lists — no indent, flush */
+  ol:not(.manual-step-list) {
+    padding-left: 0;
+
+    > li {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.65;
+      margin-bottom: 8px;
+    }
+  }
+
+  /* Unordered lists — flush, no indent */
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px;
+
+    li {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.65;
+      margin-bottom: 8px;
+    }
+  }
+
+  /* strong / bold */
+  strong {
+    color: #1a1a2e;
+    font-weight: 700;
+  }
+
+  /* Inline code */
+  code {
+    background: #f4f6f8;
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #1a1a2e;
+  }
+
+  /* Code blocks */
+  pre {
+    background: #f4f6f8;
+    border-radius: 12px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 0 0 16px;
+
+    code {
+      background: none;
+      padding: 0;
+    }
+  }
+}
+
+/* ── Bottom bookmark CTA ─────────────────────────────────────── */
+
+.device-manual-cta {
+  padding: 8px 20px 24px;
+  background: white;
+  text-align: center;
+}
+
+.device-manual-cta-hint {
+  font-size: 13px;
+  color: #999;
+  margin: 0 0 10px;
+}
+
+.device-manual-cta-note {
+  font-size: 12px;
+  color: #bbb;
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+
+.device-manual-cta-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 16px;
+  background: #4ECDC4;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Space Grotesk", sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 0.9; color: white; }
+  &:active { opacity: 0.8; }
+
+  i { font-size: 15px; }
+
+  /* Unsave state — outline style */
+  &--saved {
+    background: transparent;
+    border: 2px solid #4ECDC4;
+    color: #4ECDC4;
+    padding: 14px;
+
+    &:hover { background: rgba(78, 205, 196, 0.08); color: #4ECDC4; }
   }
 }

@@ -1,9 +1,9 @@
-<%# Text Manual page — device photo + full instructions %>
-<% content_for :title, "#{@device.name} Manual" %>
+<%# Text Manual page — redesigned with step-by-step layout %>
+<% content_for :title, "#{@device.name} — Text Manual" %>
 
-<div class="device-page">
+<div class="device-page device-page--manual">
 
-  <%# Header: back + title + save/unsave bookmark icon %>
+  <%# Header: back + TEXT MANUAL label + device name + bookmark icon %>
   <div class="device-header">
     <%= link_to device_path(@device), class: "device-back-link" do %>
       <i class="fa-solid fa-arrow-left"></i>
@@ -12,63 +12,67 @@
       <span class="device-identified-label">TEXT MANUAL</span>
       <h1 class="device-title"><%= @device.name %></h1>
     </div>
-    <%# Save / Unsave bookmark (top-right): if saved, show filled icon + unsave; else outline + save (or redirect to sign up) %>
     <div class="device-header-bookmark">
       <% if @bookmark %>
-        <%= button_to bookmark_path(@bookmark), method: :delete, class: "device-bookmark-btn device-bookmark-btn--saved", title: "Unsave", form: { data: { turbo_confirm: "Remove from saved manuals?" } } do %>
+        <%= button_to bookmark_path(@bookmark), method: :delete,
+              class: "device-bookmark-btn device-bookmark-btn--saved",
+              title: "Unsave",
+              form: { data: { turbo_confirm: "Remove from saved manuals?" } } do %>
           <i class="fa-solid fa-bookmark"></i>
         <% end %>
       <% else %>
-        <%= button_to bookmarks_path(device_id: @device.id), method: :post, class: "device-bookmark-btn device-bookmark-btn--unsaved", title: "Save" do %>
+        <%= button_to bookmarks_path(device_id: @device.id), method: :post,
+              class: "device-bookmark-btn",
+              title: "Save" do %>
           <i class="fa-regular fa-bookmark"></i>
         <% end %>
       <% end %>
     </div>
   </div>
 
-  <%# Device photo %>
-  <div class="device-hero">
-    <%= device_image_tag(@device, class: "device-hero-img", alt: @device.name) %>
+  <%# Hero image — full-width, edge-to-edge %>
+  <div class="device-manual-hero">
+    <%= device_image_tag(@device, class: "device-manual-hero-img", alt: @device.name) %>
+    <div class="device-manual-hero-overlay"></div>
   </div>
 
-  <%# Bookmark section: sign-in prompt when logged out, save button when logged in and not saved, saved state when saved %>
-  <div class="device-manual-bookmark-section">
+  <%# Intro: teal label + large device name + subtitle %>
+  <div class="device-manual-intro">
+    <span class="device-manual-intro-label">Text Manual</span>
+    <h2 class="device-manual-intro-title"><%= @device.name %></h2>
+    <p class="device-manual-intro-subtitle">Follow these steps to get started with your device.</p>
+  </div>
+
+  <%# Full markdown instructions — Stimulus controller handles card wrapping + timeline %>
+  <div class="device-manual-body" data-controller="manual">
+    <%= markdown(@device.text_instructions) %>
+  </div>
+
+  <%# Bookmark section — pinned to bottom %>
+  <div class="device-manual-cta">
     <% if !user_signed_in? %>
-      <p class="device-manual-signin-hint text-muted">Sign in to bookmark this device.</p>
-      <%= button_to bookmarks_path(device_id: @device.id), method: :post, class: "btn device-btn-manual" do %>
-        <div class="device-btn-icon">
-          <i class="fa-regular fa-bookmark"></i>
-        </div>
-        <div class="device-btn-label">
-          <span>Bookmark Device</span>
-        </div>
+      <p class="device-manual-cta-hint">Sign in to bookmark this device</p>
+      <%= button_to bookmarks_path(device_id: @device.id), method: :post,
+            class: "device-manual-cta-btn" do %>
+        <i class="fa-regular fa-bookmark"></i>
+        Bookmark Device
       <% end %>
-      <p class="small text-muted mt-1">You’ll be taken to sign up or sign in; the manual will be saved after you register or log in.</p>
+      <p class="device-manual-cta-note">You'll be redirected to sign in; the manual will be saved after.</p>
     <% elsif @bookmark %>
-      <p class="device-manual-saved-hint text-muted">This device is in your Saved Manuals.</p>
-      <%= button_to bookmark_path(@bookmark), method: :delete, class: "btn device-btn-manual device-btn-manual--outline", form: { data: { turbo_confirm: "Remove from saved manuals?" } } do %>
-        <div class="device-btn-icon">
-          <i class="fa-solid fa-bookmark"></i>
-        </div>
-        <div class="device-btn-label">
-          <span>Unsave</span>
-        </div>
+      <p class="device-manual-cta-hint">This device is in your Saved Manuals.</p>
+      <%= button_to bookmark_path(@bookmark), method: :delete,
+            class: "device-manual-cta-btn device-manual-cta-btn--saved",
+            form: { data: { turbo_confirm: "Remove from saved manuals?" } } do %>
+        <i class="fa-solid fa-bookmark"></i>
+        Unsave Device
       <% end %>
     <% else %>
-      <%= button_to bookmarks_path(device_id: @device.id), method: :post, class: "btn device-btn-manual" do %>
-        <div class="device-btn-icon">
-          <i class="fa-regular fa-bookmark"></i>
-        </div>
-        <div class="device-btn-label">
-          <span>Bookmark Device</span>
-        </div>
+      <%= button_to bookmarks_path(device_id: @device.id), method: :post,
+            class: "device-manual-cta-btn" do %>
+        <i class="fa-regular fa-bookmark"></i>
+        Bookmark Device
       <% end %>
     <% end %>
-  </div>
-
-  <%# Full text instructions %>
-  <div class="device-manual">
-    <%= markdown(@device.text_instructions) %>
   </div>
 
 </div>
