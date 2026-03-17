@@ -378,22 +378,48 @@ main:has(.device-page) {
   }
 }
 
-/* Carousel outer — clips the moving inner track. Scrolled via JS for marquee effect. */
+/* Carousel outer — clips the moving inner track; scrollable so JS can drive marquee. Scrollbar hidden. */
 .device-related-scroll {
-  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0; /* allow shrinking in flex so overflow works */
+  overflow-x: scroll;
+  overflow-y: hidden;
   padding-bottom: 4px;
   cursor: grab;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &.dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
 }
 
-/* Inner track — flex row, width grows with cards; JS scrolls parent horizontally */
+/* Inner track — single horizontal row, no wrap; JS scrolls parent for infinite marquee */
 .device-carousel-inner {
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   gap: 12px;
   width: max-content;
+  min-width: 100%;
 
-  /* button_to wraps content in <form> — hide it from flex layout */
+  /* button_to wraps in <form>; link_to is direct — keep both in flow */
   form {
     display: contents;
+  }
+
+  a.device-related-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
   }
 }
 

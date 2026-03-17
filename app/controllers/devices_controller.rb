@@ -4,7 +4,7 @@ class DevicesController < ApplicationController
   def show
     @device = Device.find(params[:id])
     @device.increment!(:views)
-    @back_path = from_explore? ? explore_path : root_path
+    # Fallback for in-app back link when browser history is empty (link uses history.back() when history.length > 1)
   end
 
   def manual
@@ -33,7 +33,7 @@ class DevicesController < ApplicationController
     end
 
     flash[:notice] = status == :existing ? "We already have instructions for #{@device.name}!" : "Device was successfully added with instructions!"
-    redirect_to device_path(@device)
+    redirect_to device_path(@device, **(params[:from].present? ? { from: params[:from] } : {}))
   rescue StandardError => e
     @not_a_device = e.is_a?(Device::NotADeviceError)
     flash.now[:alert] = "Unable to generate instructions: #{e.message}"

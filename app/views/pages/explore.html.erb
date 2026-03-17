@@ -17,7 +17,7 @@
       <div class="explore-marquee-outer" id="recentlyAddedOuter">
         <div class="explore-marquee-inner" id="recentlyAddedInner">
           <% @recent_devices.each do |device| %>
-            <%= link_to device_path(device), class: "explore-device-card" do %>
+            <%= link_to device_path(device, from: "explore"), class: "explore-device-card" do %>
               <div class="explore-device-image">
                 <%= device_image_tag(device, alt: device.name) %>
               </div>
@@ -45,7 +45,7 @@
         <% @popular_videos.each do |video| %>
           <% device = video.device %>
           <% next unless device %>
-          <%= link_to device_video_path(device, video), class: "explore-guide-card" do %>
+          <%= link_to device_video_path(device, video, from: "explore"), class: "explore-guide-card" do %>
             <div class="explore-guide-thumb">
               <%= device_image_tag(device, alt: device.name) %>
               <div class="explore-guide-play">

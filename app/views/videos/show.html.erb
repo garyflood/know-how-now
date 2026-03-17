@@ -5,7 +5,7 @@
 
   <%# Header: back arrow + title + share icon %>
   <div class="video-header">
-    <%= link_to device_path(@device), class: "video-back-link" do %>
+    <%= link_to :back, class: "video-back-link" do %>
       <i class="fa-solid fa-arrow-left"></i>
     <% end %>
     <h1 class="video-header-title">Video Instruction</h1>
@@ -32,7 +32,7 @@
   <%# Title + meta + bookmark below player %>
   <div class="video-info">
     <div class="video-title-row">
-      <%= link_to device_path(@device), class: "video-title" do %>
+      <%= link_to device_path(@device, from: params[:from]), class: "video-title" do %>
         <%= @device.name %>
       <% end %>
 
@@ -61,7 +61,7 @@
       <%= time_ago_in_words(@video.created_at) %> ago
     </p>
     <p class="video-device-row">
-      <%= link_to @device.name, device_path(@device), class: "video-device-link" %>
+      <%= link_to @device.name, device_path(@device, from: params[:from]), class: "video-device-link" %>
     </p>
   </div>
 
