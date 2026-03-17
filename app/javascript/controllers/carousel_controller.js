@@ -13,12 +13,14 @@ export default class extends Controller {
     this.boundStop = this.stopAutoScroll.bind(this)
     this.boundResume = this.resumeAutoScroll.bind(this)
     this.boundWheel = this.onWheel.bind(this)
+    this.boundWrap = this.wrapScroll.bind(this)
 
     const inner = this.element.querySelector(".device-carousel-inner") || this.element.firstElementChild
     if (inner && inner.scrollWidth > 0) {
       inner.innerHTML += inner.innerHTML
     }
 
+    this.element.addEventListener("scroll", this.boundWrap, { passive: true })
     this.element.addEventListener("wheel", this.boundWheel, { passive: true })
     this.element.addEventListener("touchstart", this.boundStop, { passive: true })
     this.element.addEventListener("touchend", this.boundResume, { passive: true })
@@ -31,11 +33,24 @@ export default class extends Controller {
   disconnect() {
     this.stopAutoScroll()
     if (this.resumeTimeout != null) clearTimeout(this.resumeTimeout)
+    this.element.removeEventListener("scroll", this.boundWrap)
     this.element.removeEventListener("wheel", this.boundWheel)
     this.element.removeEventListener("touchstart", this.boundStop)
     this.element.removeEventListener("touchend", this.boundResume)
     this.element.removeEventListener("mousedown", this.boundStop)
     document.removeEventListener("mouseup", this.boundResume)
+  }
+
+  wrapScroll() {
+    const el = this.element
+    const halfWidth = el.scrollWidth / 2
+    if (halfWidth <= 0) return
+    const eps = 2
+    if (el.scrollLeft >= halfWidth) {
+      el.scrollLeft = eps
+    } else if (el.scrollLeft <= 0) {
+      el.scrollLeft = halfWidth - eps
+    }
   }
 
   onWheel() {
@@ -71,18 +86,14 @@ export default class extends Controller {
     const speed = halfWidth / duration
     this.lastTime = performance.now()
 
-    if (el.scrollLeft >= halfWidth) {
-      el.scrollLeft = el.scrollLeft % halfWidth
-    }
+    this.wrapScroll()
 
     const step = (now) => {
       if (this.manualScroll) return
       const dt = now - this.lastTime
       this.lastTime = now
       el.scrollLeft += speed * dt
-      if (el.scrollLeft >= halfWidth) {
-        el.scrollLeft -= halfWidth
-      }
+      this.wrapScroll()
       this.rafId = requestAnimationFrame(step)
     }
     this.rafId = requestAnimationFrame(step)
