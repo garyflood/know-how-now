@@ -8,6 +8,7 @@ body:has(.profile-page) {
 .profile-page {
   width: 100%;
   max-width: 480px;
+  min-height: var(--app-content-height);
   margin: 0 auto;
   padding: 0 24px 20px;
   background: white;
@@ -296,6 +297,7 @@ body:has(.uploads-page) {
 .uploads-page {
   width: 100%;
   max-width: 480px;
+  min-height: var(--app-content-height);
   margin: 0 auto;
   background: white;
   border-radius: 20px;
@@ -629,6 +631,7 @@ body:has(.contributor-page) {
 .contributor-page {
   width: 100%;
   max-width: 480px;
+  min-height: var(--app-content-height);
   margin: 0 auto;
   background: white;
   border-radius: 20px;
