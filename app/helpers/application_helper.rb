@@ -19,7 +19,8 @@ module ApplicationHelper
     return url if url.blank?
     return url unless url.include?("cloudinary.com/") && url.include?("/upload/")
 
-    url.sub(%r{/upload/(?:v\d+/)?}, "/upload/w_#{width},h_#{height},c_fill,q_auto,f_auto/")
+    # Insert transformation params right after /upload/ — keeps the version number intact
+    url.sub("/upload/", "/upload/w_#{width},h_#{height},c_fill,q_auto,f_auto/")
   end
 
   # Renders a device thumbnail using the uploaded device photo (Cloudinary),
