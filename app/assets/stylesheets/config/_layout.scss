@@ -1,0 +1,22 @@
+/* ── Mobile-app shell layout ────────────────────────────────────
+   html/body never scroll. main.app-main is the sole scroll
+   container, pinned between the top of the viewport and the
+   fixed bottom navbar.
+   ─────────────────────────────────────────────────────────────── */
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none; /* prevents pull-to-refresh bounce */
+}
+
+main.app-main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: calc(60px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}

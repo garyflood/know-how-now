@@ -18,14 +18,14 @@ main:has(.device-page) {
   display: flex;
   flex-direction: column;
   font-family: "Space Grotesk", sans-serif;
-  /* Ensure content never hides behind the fixed bottom navbar (~60px tall) */
-  padding-bottom: 80px;
 }
 
-/* ── Header ──────────────────────────────────────────────────── */
+/* ── Header — sticky so it pins to top as content scrolls ───── */
 
 .device-header {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
