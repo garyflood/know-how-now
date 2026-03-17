@@ -23,7 +23,7 @@
             <div class="saved-manuals-item-body">
               <span class="saved-manuals-item-name"><%= device.name %></span>
               <span class="saved-manuals-item-meta text-muted small"><%= device.category&.category_name %></span>
-              <%= link_to manual_device_path(device), class: "btn btn-sm saved-manuals-view-btn mt-2" do %>
+              <%= link_to device_path(device), class: "btn btn-sm saved-manuals-view-btn mt-2" do %>
                 <i class="fa-solid fa-book-open me-1"></i> View Guide
               <% end %>
             </div>
