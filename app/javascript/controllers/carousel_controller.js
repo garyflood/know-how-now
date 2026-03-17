@@ -1,16 +1,23 @@
 import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="carousel"
+// Infinite horizontal marquee: duplicates inner content and scrolls with seamless wrap
 export default class extends Controller {
   static values = { duration: { type: Number, default: 50000 } }
 
   connect() {
     this.rafId = null
     this.resumeTimeout = null
+    this.lastTime = null
     this.manualScroll = false
     this.boundStop = this.stopAutoScroll.bind(this)
     this.boundResume = this.resumeAutoScroll.bind(this)
     this.boundWheel = this.onWheel.bind(this)
+
+    const inner = this.element.querySelector(".device-carousel-inner") || this.element.firstElementChild
+    if (inner && inner.scrollWidth > 0) {
+      inner.innerHTML += inner.innerHTML
+    }
 
     this.element.addEventListener("wheel", this.boundWheel, { passive: true })
     this.element.addEventListener("touchstart", this.boundStop, { passive: true })
@@ -57,19 +64,26 @@ export default class extends Controller {
     const el = this.element
     if (!el) return
 
-    const maxLeft = Math.max(0, el.scrollWidth - el.clientWidth)
-    if (maxLeft <= 0) return
+    const halfWidth = el.scrollWidth / 2
+    if (halfWidth <= 0) return
 
     const duration = this.hasDurationValue ? this.durationValue : 50000
-    const startLeft = el.scrollLeft
-    const startTime = performance.now()
+    const speed = halfWidth / duration
+    this.lastTime = performance.now()
+
+    if (el.scrollLeft >= halfWidth) {
+      el.scrollLeft = el.scrollLeft % halfWidth
+    }
 
     const step = (now) => {
       if (this.manualScroll) return
-      const elapsed = now - startTime
-      const t = Math.min(elapsed / duration, 1)
-      el.scrollLeft = startLeft + (maxLeft - startLeft) * t
-      if (t < 1) this.rafId = requestAnimationFrame(step)
+      const dt = now - this.lastTime
+      this.lastTime = now
+      el.scrollLeft += speed * dt
+      if (el.scrollLeft >= halfWidth) {
+        el.scrollLeft -= halfWidth
+      }
+      this.rafId = requestAnimationFrame(step)
     }
     this.rafId = requestAnimationFrame(step)
   }
