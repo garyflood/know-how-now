@@ -3,9 +3,9 @@
 
 <div class="profile-page saved-manuals-page">
   <div class="profile-header">
-    <%= link_to profile_path, class: "profile-header-link" do %>
+    <a href="#" class="profile-header-link" data-back-fallback="<%= profile_path %>" onclick="if (window.history.length > 1) { history.back(); } else { window.location.replace(this.dataset.backFallback); } return false;" aria-label="Go back">
       <i class="fa-solid fa-arrow-left"></i>
-    <% end %>
+    </a>
     <h2 class="profile-header-title">My Manuals</h2>
     <span class="profile-header-link" style="visibility: hidden;"><i class="fa-solid fa-ellipsis"></i></span>
   </div>

@@ -14,9 +14,10 @@
       <span>EXPLORE</span>
     <% end %>
 
-    <%# Profile tab — login if not signed in, profile page if signed in %>
+    <%# Profile tab — pass from= so My Uploads back can return to Explore or Scanner %>
     <% if user_signed_in? %>
-      <%= link_to profile_path, class: "bottom-navbar-tab #{current_page?(profile_path) ? 'active' : ''}" do %>
+      <% profile_url = current_page?(explore_path) ? profile_path(from: "explore") : (current_page?(root_path) ? profile_path(from: "scanner") : profile_path) %>
+      <%= link_to profile_url, class: "bottom-navbar-tab #{current_page?(profile_path) ? 'active' : ''}" do %>
         <i class="fa-solid fa-user"></i>
         <span>PROFILE</span>
       <% end %>

@@ -3,11 +3,12 @@
 
 <div class="uploads-page">
 
-  <%# Header %>
+  <%# Header — back always goes to Profile (replace), preserving where we came from via ?from= %>
   <div class="uploads-header">
-    <%= link_to profile_path, class: "uploads-back-link" do %>
+    <% uploads_back_url = profile_path(params[:from].present? ? { from: params[:from] } : {}) %>
+    <a href="#" class="uploads-back-link" data-back-fallback="<%= uploads_back_url %>" onclick="window.location.replace(this.dataset.backFallback); return false;" aria-label="Go back">
       <i class="fa-solid fa-arrow-left"></i>
-    <% end %>
+    </a>
     <h1 class="uploads-title">My Uploads</h1>
     <%# Spacer keeps title centered %>
     <span class="uploads-header-spacer"></span>
@@ -25,11 +26,13 @@
     >
   </div>
 
-  <%# Sort tabs — Latest / Most Viewed %>
+  <%# Sort tabs — Latest / Most Viewed (preserve ?from so Profile back knows where to send you) %>
   <div class="uploads-tabs">
-    <%= link_to "Latest", profile_uploads_path,
+    <%= link_to "Latest",
+          profile_uploads_path(params[:from].present? ? { from: params[:from] } : {}),
           class: "uploads-tab #{'uploads-tab--active' if @sort == 'latest'}" %>
-    <%= link_to "Most Viewed", profile_uploads_path(sort: "most_viewed"),
+    <%= link_to "Most Viewed",
+          profile_uploads_path((params[:from].present? ? { from: params[:from] } : {}).merge(sort: "most_viewed")),
           class: "uploads-tab #{'uploads-tab--active' if @sort == 'most_viewed'}" %>
   </div>
 

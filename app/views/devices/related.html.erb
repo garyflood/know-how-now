@@ -3,11 +3,11 @@
 
 <div class="device-page device-related-page">
 
-  <%# Header: back arrow + "Identify Device" title %>
+  <%# Header: back arrow — history.back() so we don't push a new device entry (avoids device ↔ related loop) %>
   <div class="device-header">
-    <%= link_to device_path(@device), class: "device-back-link" do %>
+    <a href="#" class="device-back-link" data-back-fallback="<%= device_path(@device) %>" onclick="if (window.history.length > 1) { history.back(); } else { window.location.replace(this.dataset.backFallback); } return false;" aria-label="Go back">
       <i class="fa-solid fa-arrow-left"></i>
-    <% end %>
+    </a>
     <div class="device-header-info">
       <h1 class="device-title">Identify Device</h1>
     </div>
