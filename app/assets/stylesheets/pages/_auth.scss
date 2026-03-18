@@ -9,16 +9,16 @@ body:has(.auth-page) {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-height: 100vh;
+  min-height: var(--app-content-height);
   width: 100%;
-  padding: 20px 20px 80px;
+  padding: 20px;
   background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 50%, #f0fdfa 100%);
 }
 
 .auth-card {
   width: 100%;
   max-width: 400px;
-  min-height: calc(100vh - 100px);
+  min-height: calc(var(--app-content-height) - 40px);
   margin: 0 auto;
   background: white;
   border-radius: 20px;
