@@ -76,8 +76,9 @@
         SPECIFY MODEL/SELECT A DIFFERENT MODEL
       </p>
 
-      <div class="device-related-scroll" id="carouselOuter" data-controller="carousel">
-        <div class="device-carousel-inner" id="carouselInner">
+      <%# Horizontal scroll container — swipe to start/end, no auto-scroll %>
+      <div class="device-related-scroll">
+        <div class="device-related-inner">
 
           <%# Current device card — highlighted as selected; click stays on same device page %>
           <%= link_to device_path(@device), class: "device-related-card device-related-card--active" do %>
@@ -118,7 +119,7 @@
 
 </div>
 
-<%# CSS/JS ticker carousel — duplicate cards and drive smooth horizontal scroll %>
+<%# Hero image rotation + layout tweak; related section is swipe-only (no auto-scroll) via CSS overflow-x %>
 <script>
   // Remove layout's inline padding-bottom so no gap appears below the page content
   const mainEl = document.querySelector("main");
@@ -133,139 +134,4 @@
       slides[current].classList.add("device-hero-img--active");
     }, 3500);
   }
-
-  // Infinite auto-scrolling marquee for "Specify model/select a different model"
-  function initCarousel() {
-    const outer = document.getElementById("carouselOuter");
-    const inner = document.getElementById("carouselInner");
-    if (!outer || !inner || inner.children.length === 0) return;
-
-    // Duplicate content for seamless infinite loop (as cards exit left, copy appears on right)
-    inner.innerHTML += inner.innerHTML;
-    void outer.offsetHeight; // force reflow so scrollWidth is correct
-
-    let isPaused = false;
-    let isDragging = false;
-    let startX = 0;
-    let startScroll = 0;
-    let resumeTimeout = null;
-
-    function step() {
-      if (!outer || !inner) return;
-      if (!isPaused && !isDragging) {
-        outer.scrollLeft += 0.5;
-        var halfWidth = inner.scrollWidth / 2;
-        if (halfWidth > 0 && outer.scrollLeft >= halfWidth) {
-          outer.scrollLeft -= halfWidth;
-        }
-      }
-      requestAnimationFrame(step);
-    }
-    // Start after a short delay so layout is complete (helps after Turbo navigation)
-    setTimeout(function () {
-      if (outer && inner) requestAnimationFrame(step);
-    }, 80);
-
-    function pause() {
-      isPaused = true;
-      if (resumeTimeout) {
-        clearTimeout(resumeTimeout);
-        resumeTimeout = null;
-      }
-    }
-
-    function resume() {
-      if (resumeTimeout) clearTimeout(resumeTimeout);
-      resumeTimeout = setTimeout(function () {
-        resumeTimeout = null;
-        isPaused = false;
-      }, 300);
-    }
-
-    // Pause on hover (desktop)
-    outer.addEventListener("mouseenter", pause);
-    outer.addEventListener("mouseleave", function () {
-      if (!isDragging) resume();
-    });
-
-    // Touch: pause, allow horizontal drag; only count as "drag" if moved past threshold (so taps still open links)
-    var touchStartX = 0;
-    outer.addEventListener("touchstart", function (e) {
-      touchDidDrag = false;
-      touchStartX = e.touches[0].pageX;
-      isDragging = true;
-      pause();
-      startX = e.touches[0].pageX;
-      startScroll = outer.scrollLeft;
-    }, { passive: true });
-
-    outer.addEventListener("touchmove", function (e) {
-      if (!e.touches[0]) return;
-      var dx = e.touches[0].pageX - startX;
-      if (Math.abs(e.touches[0].pageX - touchStartX) > 10) touchDidDrag = true;
-      var half = inner.scrollWidth / 2;
-      outer.scrollLeft = Math.max(0, Math.min(half - 1, startScroll - dx));
-      startX = e.touches[0].pageX;
-      startScroll = outer.scrollLeft;
-    }, { passive: true });
-
-    outer.addEventListener("touchend", function () {
-      isDragging = false;
-      startScroll = outer.scrollLeft;
-      resume();
-    });
-
-    // Mouse drag: only treat as drag if user moves past threshold so card links still work
-    var dragStartX = 0;
-    var didDrag = false;
-    var touchDidDrag = false;
-
-    outer.addEventListener("mousedown", function (e) {
-      dragStartX = e.pageX;
-      didDrag = false;
-
-      function onMove(ev) {
-        var dx = Math.abs(ev.pageX - dragStartX);
-        if (dx > 5 && !didDrag) {
-          didDrag = true;
-          isDragging = true;
-          pause();
-          outer.classList.add("dragging");
-          startX = ev.pageX;
-          startScroll = outer.scrollLeft;
-        }
-        if (didDrag) {
-          var d = ev.pageX - startX;
-          startX = ev.pageX;
-          var half = inner.scrollWidth / 2;
-          outer.scrollLeft = Math.max(0, Math.min(half - 1, outer.scrollLeft - d));
-          startScroll = outer.scrollLeft;
-        }
-      }
-
-      function onUp() {
-        if (didDrag) {
-          isDragging = false;
-          outer.classList.remove("dragging");
-          resume();
-        }
-        document.removeEventListener("mousemove", onMove);
-        document.removeEventListener("mouseup", onUp);
-      }
-
-      document.addEventListener("mousemove", onMove);
-      document.addEventListener("mouseup", onUp);
-    });
-
-    // If user dragged (mouse or touch), prevent card link/form from firing
-    outer.addEventListener("click", function (e) {
-      if (didDrag || touchDidDrag) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    }, true);
-  }
-
-  // Run when this page's script executes (after full load or after Turbo replaces body with this page)
-  initCarousel();
 </script>

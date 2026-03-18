@@ -4,7 +4,7 @@
     <h1 class="explore-title">Explore</h1>
   </header>
 
-  <%# Recently Added Devices — horizontal marquee with auto-scroll %>
+  <%# Recently Added Devices — horizontal scroll (swipe when more than fit on screen) %>
   <section class="explore-section mt-4">
     <div class="explore-section-header">
       <h2 class="explore-section-title">Recently Added Devices</h2>
@@ -14,8 +14,8 @@
     </div>
 
     <% if @recent_devices.any? %>
-      <div class="explore-marquee-outer" id="recentlyAddedOuter">
-        <div class="explore-marquee-inner" id="recentlyAddedInner">
+      <div class="explore-marquee-outer">
+        <div class="explore-marquee-inner">
           <% @recent_devices.each do |device| %>
             <%= link_to device_path(device), class: "explore-device-card" do %>
               <div class="explore-device-image">
@@ -67,76 +67,3 @@
   </section>
 </div>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const outer = document.getElementById("recentlyAddedOuter");
-    const inner = document.getElementById("recentlyAddedInner");
-
-    if (!outer || !inner) return;
-
-    // Duplicate cards for seamless infinite scroll
-    inner.innerHTML += inner.innerHTML;
-
-    let isPaused = false;
-    let isDragging = false;
-    let startX = 0;
-    let startScroll = 0;
-
-    function step() {
-      if (!isPaused && !isDragging) {
-        outer.scrollLeft += 0.5; // pixels per frame
-        const halfWidth = inner.scrollWidth / 2;
-        if (outer.scrollLeft >= halfWidth) {
-          outer.scrollLeft -= halfWidth;
-        }
-      }
-      requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-
-    function pause() {
-      isPaused = true;
-    }
-
-    function resume() {
-      isPaused = false;
-    }
-
-    outer.addEventListener("mouseenter", pause);
-    outer.addEventListener("mouseleave", function () {
-      if (!isDragging) resume();
-    });
-
-    outer.addEventListener("touchstart", function () {
-      isDragging = true;
-      pause();
-    }, { passive: true });
-
-    outer.addEventListener("touchend", function () {
-      isDragging = false;
-      resume();
-    });
-
-    outer.addEventListener("mousedown", function (e) {
-      isDragging = true;
-      pause();
-      startX = e.pageX;
-      startScroll = outer.scrollLeft;
-
-      function onMove(ev) {
-        const dx = ev.pageX - startX;
-        outer.scrollLeft = startScroll - dx;
-      }
-
-      function onUp() {
-        isDragging = false;
-        resume();
-        document.removeEventListener("mousemove", onMove);
-        document.removeEventListener("mouseup", onUp);
-      }
-
-      document.addEventListener("mousemove", onMove);
-      document.addEventListener("mouseup", onUp);
-    });
-  });
-</script>
