@@ -1,7 +1,31 @@
 <%# Creator Submission — video upload form %>
 <% content_for :title, "Creator Submission" %>
 
-<div class="upload-page">
+<div class="upload-page" data-controller="upload">
+
+  <%# Upload progress overlay — hidden until form is submitted %>
+  <div class="upload-overlay" data-upload-target="overlay" style="display: none;">
+    <%# Progress state %>
+    <div class="upload-progress-card" data-upload-target="progressCard">
+      <div class="upload-progress-icon">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+      </div>
+      <p class="upload-progress-label">Uploading video...</p>
+      <div class="upload-progress-track">
+        <div class="upload-progress-fill" data-upload-target="progressBar"></div>
+      </div>
+      <p class="upload-progress-pct" data-upload-target="progressPct">0%</p>
+    </div>
+
+    <%# Success state — shown after upload completes %>
+    <div class="upload-success-card" data-upload-target="successCard" style="display: none;">
+      <div class="upload-success-icon">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <p class="upload-success-title">Upload Successful!</p>
+      <p class="upload-success-sub">Taking you to your video...</p>
+    </div>
+  </div>
 
   <%# Header: back arrow + title %>
   <div class="upload-header">
@@ -13,7 +37,8 @@
   </div>
 
   <%= form_with url: user_videos_path(current_user), scope: :video, method: :post,
-        html: { multipart: true, class: "upload-form" } do |f| %>
+        html: { multipart: true, class: "upload-form",
+                data: { turbo: false, action: "submit->upload#submit" } } do |f| %>
 
     <%# Validation errors %>
     <% if @video.errors.any? %>
@@ -40,7 +65,8 @@
                 id: "device_name",
                 placeholder: "e.g. Sony WH-1000XM5",
                 required: true,
-                class: "upload-input" %>
+                class: "upload-input",
+                data: { action: "input->upload#updateCheck" } %>
           <i class="fa-regular fa-circle-check upload-input-check" id="deviceNameCheck"></i>
         </div>
         <p class="upload-hint">Ensure the model name exactly matches the label on your device or its original packaging.</p>
@@ -59,8 +85,12 @@
         <p class="upload-dropzone-title">Tap to upload photos</p>
         <p class="upload-dropzone-sub">JPG, PNG up to 2MB</p>
         <%= file_field_tag "device_images[]", accept: "image/*", multiple: true,
-              class: "upload-file-input", id: "device_images" %>
+              class: "upload-file-input", id: "device_images",
+              data: { action: "change->upload#previewPhotos" } %>
       </label>
+
+      <%# Photo thumbnails appear here after selection %>
+      <div class="upload-photo-preview" data-upload-target="photoPreview" style="display: none;"></div>
 
       <div class="upload-tips">
         <div class="upload-tip">
@@ -79,14 +109,15 @@
       <h2 class="upload-section-title">Upload Video</h2>
       <p class="upload-section-desc">Upload your high-quality video tutorial and the corresponding summary.</p>
 
-      <label class="upload-dropzone" for="video_file">
-        <div class="upload-dropzone-icon">
+      <label class="upload-dropzone" for="video_file" data-upload-target="videoDropzone">
+        <div class="upload-dropzone-icon" data-upload-target="videoIcon">
           <i class="fa-regular fa-video"></i>
         </div>
-        <p class="upload-dropzone-title">Upload Video</p>
-        <p class="upload-dropzone-sub">MP4, MOV up to 500MB</p>
+        <p class="upload-dropzone-title" data-upload-target="videoTitle">Upload Video</p>
+        <p class="upload-dropzone-sub" data-upload-target="videoSub">MP4, MOV up to 500MB</p>
         <%= file_field_tag :video_file, accept: "video/*", required: true,
-              class: "upload-file-input", id: "video_file" %>
+              class: "upload-file-input", id: "video_file",
+              data: { action: "change->upload#previewVideo" } %>
       </label>
 
       <%= f.text_area :summary,
@@ -102,35 +133,3 @@
 
   <% end %>
 </div>
-
-<script>
-  // Show teal checkmark when device name field has content
-  const deviceInput = document.getElementById("device_name");
-  const deviceCheck = document.getElementById("deviceNameCheck");
-
-  function updateCheck() {
-    if (deviceInput && deviceCheck) {
-      deviceCheck.style.color = deviceInput.value.trim().length > 0 ? "#4ECDC4" : "#ccc";
-    }
-  }
-
-  if (deviceInput) {
-    deviceInput.addEventListener("input", updateCheck);
-    updateCheck();
-  }
-
-  // Show selected filename inside each dropzone
-  document.querySelectorAll(".upload-dropzone").forEach(function(zone) {
-    const input = zone.querySelector(".upload-file-input");
-    const subText = zone.querySelector(".upload-dropzone-sub");
-    if (input && subText) {
-      input.addEventListener("change", function() {
-        if (input.files && input.files.length > 0) {
-          const names = Array.from(input.files).map(function(f) { return f.name; });
-          subText.textContent = names.join(", ");
-          subText.style.color = "#4ECDC4";
-        }
-      });
-    }
-  });
-</script>

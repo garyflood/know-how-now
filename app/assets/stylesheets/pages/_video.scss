@@ -468,6 +468,13 @@ main:has(.upload-page) {
   overflow: hidden;
 
   &:hover { background: #e4f9f6; }
+
+  /* Video selected state */
+  &--selected {
+    border-style: solid;
+    border-color: #4ECDC4;
+    background: #e8faf9;
+  }
 }
 
 .upload-dropzone-icon {
@@ -579,4 +586,143 @@ main:has(.upload-page) {
 
   &:hover { opacity: 0.9; }
   &:active { opacity: 0.8; }
+}
+
+/* ── Photo preview thumbnails ────────────────────────────────── */
+
+.upload-photo-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.upload-photo-thumb {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #4ECDC4;
+}
+
+/* ── Upload progress overlay ─────────────────────────────────── */
+
+.upload-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.96);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* ── Progress card ───────────────────────────────────────────── */
+
+.upload-progress-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.upload-progress-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e6faf7, #d4f5ef);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    font-size: 30px;
+    color: #4ECDC4;
+    animation: upload-bounce 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes upload-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+.upload-progress-label {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.upload-progress-track {
+  width: 100%;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.upload-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #4ECDC4, #44E0B8);
+  border-radius: 99px;
+  transition: width 0.3s ease;
+}
+
+.upload-progress-pct {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4ECDC4;
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+/* ── Success card ────────────────────────────────────────────── */
+
+.upload-success-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.upload-success-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e6faf7, #d4f5ef);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    font-size: 36px;
+    color: #4ECDC4;
+    animation: success-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
+}
+
+@keyframes success-pop {
+  0%   { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.upload-success-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.upload-success-sub {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
 }
