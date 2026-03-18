@@ -3,10 +3,15 @@
 .auth-page {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   min-height: 100vh;
+<<<<<<< Updated upstream
   width: 100vw;
   padding: 20px 20px 80px; /* bottom padding accounts for navbar */
+=======
+  width: 100%;
+  padding: 20px;
+>>>>>>> Stashed changes
   background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 50%, #f0fdfa 100%);
   /* Break out of the container constraints from layout */
   margin-left: calc(-50vw + 50%);
@@ -16,6 +21,10 @@
 .auth-card {
   width: 100%;
   max-width: 400px;
+<<<<<<< Updated upstream
+=======
+  margin: 0 auto;
+>>>>>>> Stashed changes
   background: white;
   border-radius: 0;
   padding: 30px 24px;
@@ -106,8 +115,7 @@
   font-size: 22px;
   font-weight: 800;
   color: #1a1a2e;
-  margin: 0 auto;
-  padding-right: 36px; /* offset for centered look with back arrow */
+  margin: 0;
 }
 
 /* Upload Photo section */
@@ -201,6 +209,48 @@
   margin-bottom: 6px;
 }
 
+<<<<<<< Updated upstream
+=======
+/* Password field wrapper — positions eye toggle */
+.auth-input-wrapper {
+  position: relative;
+
+  .form-group {
+    margin-bottom: 0;
+  }
+
+  .auth-input {
+    padding-right: 44px; /* space for eye icon */
+  }
+}
+
+/* Eye toggle button */
+.auth-eye-btn {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  color: #bbb;
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+
+  &:hover {
+    color: #4ECDC4;
+  }
+}
+
+/* Switch link footer */
+.auth-footer {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e9ecef;
+}
+
+>>>>>>> Stashed changes
 /* Style the input inside simple_form wrapper */
 .auth-input {
   width: 100%;
