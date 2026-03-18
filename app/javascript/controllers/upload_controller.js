@@ -11,7 +11,8 @@ export default class extends Controller {
     "videoDropzone",
     "videoIcon",
     "videoTitle",
-    "videoSub"
+    "videoSub",
+    "summary"
   ]
 
   // ── Photo preview ──────────────────────────────────────────────────────────
@@ -68,9 +69,26 @@ export default class extends Controller {
     }
   }
 
+  // ── Summary check icon ─────────────────────────────────────────────────────
+  // Turns the check icon teal when the summary has content
+  updateSummaryCheck(event) {
+    const check = this.element.querySelector("#summaryCheck")
+    if (check) {
+      check.style.color = event.target.value.trim().length > 0 ? "#4ECDC4" : "#ccc"
+    }
+  }
+
   // ── Form submit with XHR progress ─────────────────────────────────────────
   submit(event) {
     event.preventDefault()
+
+    // Validate summary before starting upload
+    if (this.summaryTarget.value.trim().length === 0) {
+      this.summaryTarget.classList.add("upload-summary--error")
+      this.summaryTarget.focus()
+      return
+    }
+    this.summaryTarget.classList.remove("upload-summary--error")
 
     const form    = event.target           // the <form> element, not the controller div
     const formData = new FormData(form)

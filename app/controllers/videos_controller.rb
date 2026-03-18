@@ -17,9 +17,10 @@ class VideosController < ApplicationController
     end
 
     if device.video.present?
-      @video = Video.new
-      flash.now[:alert] = "#{device.name} already has a video."
-      return render :new, status: :unprocessable_entity
+      redirect_to new_user_video_path(current_user,
+        device_name: params[:device_name],
+        duplicate_device: device.name)
+      return
     end
 
     cloudinary_url = Video.upload_video_to_cloudinary(params[:video_file])

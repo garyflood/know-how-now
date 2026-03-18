@@ -65,10 +65,13 @@
                 id: "device_name",
                 placeholder: "e.g. Sony WH-1000XM5",
                 required: true,
-                class: "upload-input",
+                class: "upload-input#{' upload-input--error' if params[:duplicate_device].present?}",
                 data: { action: "input->upload#updateCheck" } %>
           <i class="fa-regular fa-circle-check upload-input-check" id="deviceNameCheck"></i>
         </div>
+        <% if params[:duplicate_device].present? %>
+          <p class="upload-field-error"><%= params[:duplicate_device] %> already has a linked video</p>
+        <% end %>
         <p class="upload-hint">Ensure the model name exactly matches the label on your device or its original packaging.</p>
       </div>
     </div>
@@ -120,10 +123,14 @@
               data: { action: "change->upload#previewVideo" } %>
       </label>
 
-      <%= f.text_area :summary,
-            placeholder: "Add video summary ...",
-            class: "upload-summary",
-            rows: 4 %>
+      <div class="upload-input-wrapper upload-summary-wrapper">
+        <%= f.text_area :summary,
+              placeholder: "Add video summary ...",
+              class: "upload-summary",
+              rows: 4,
+              data: { upload_target: "summary", action: "input->upload#updateSummaryCheck" } %>
+        <i class="fa-regular fa-circle-check upload-input-check upload-summary-check" id="summaryCheck"></i>
+      </div>
     </div>
 
     <%# ── Submit ── %>
