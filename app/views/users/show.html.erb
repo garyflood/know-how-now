@@ -1,11 +1,12 @@
 <%# Profile page — matches Know-How UI design %>
 <div class="profile-page">
 
-  <%# Header: back arrow only %>
+  <%# Header: back arrow — always go to Explore or Scanner (replace), never step through other history %>
   <div class="profile-header">
-    <%= link_to root_path, class: "profile-header-link" do %>
+    <% profile_back_url = params[:from] == "explore" ? explore_path : root_path %>
+    <a href="#" class="profile-header-link" data-back-fallback="<%= profile_back_url %>" onclick="window.location.replace(this.dataset.backFallback); return false;" aria-label="Go back">
       <i class="fa-solid fa-arrow-left"></i>
-    <% end %>
+    </a>
   </div>
 
   <%# Avatar & user info %>

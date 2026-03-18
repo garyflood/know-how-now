@@ -3,11 +3,11 @@
 
 <div class="device-page device-page--manual">
 
-  <%# Header: back + TEXT MANUAL label + device name + bookmark icon %>
+  <%# Header: back — history.back() to avoid stacking; replace() for fallback so no manual/device loop %>
   <div class="device-header">
-    <%= link_to device_path(@device), class: "device-back-link" do %>
+    <a href="#" class="device-back-link" data-back-fallback="<%= @back_path %>" onclick="if (window.history.length > 1) { history.back(); } else { window.location.replace(this.dataset.backFallback); } return false;" aria-label="Go back">
       <i class="fa-solid fa-arrow-left"></i>
-    <% end %>
+    </a>
     <div class="device-header-info">
       <span class="device-identified-label">TEXT MANUAL</span>
       <h1 class="device-title"><%= @device.name %></h1>
