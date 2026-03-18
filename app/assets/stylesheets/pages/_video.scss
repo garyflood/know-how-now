@@ -446,6 +446,18 @@ main:has(.upload-page) {
   }
 
   &::placeholder { color: #bbb; }
+
+  &--error {
+    border-color: #e74c3c;
+    &:focus { border-color: #e74c3c; }
+  }
+}
+
+.upload-field-error {
+  font-size: 12px;
+  font-weight: 600;
+  color: #e74c3c;
+  margin: 0;
 }
 
 .upload-input-check {
@@ -562,10 +574,14 @@ main:has(.upload-page) {
 
 /* ── Summary textarea ────────────────────────────────────────── */
 
+.upload-summary-wrapper {
+  position: relative;
+  margin-top: 12px;
+}
+
 .upload-summary {
   width: 100%;
-  margin-top: 12px;
-  padding: 14px 16px;
+  padding: 14px 44px 14px 16px;
   border: 1.5px solid #e0e0e0;
   border-radius: 12px;
   font-size: 14px;
@@ -579,6 +595,16 @@ main:has(.upload-page) {
 
   &:focus { border-color: #4ECDC4; }
   &::placeholder { color: #bbb; }
+
+  &--error {
+    border-color: #e74c3c;
+    &:focus { border-color: #e74c3c; }
+  }
+}
+
+.upload-summary-check {
+  top: 14px;
+  transform: none;
 }
 
 /* ── Submit button ───────────────────────────────────────────── */
