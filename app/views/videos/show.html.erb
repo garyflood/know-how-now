@@ -8,7 +8,10 @@
     <%= link_to 'javascript:history.back()', class: "video-back-link" do %>
       <i class="fa-solid fa-arrow-left"></i>
     <% end %>
-    <h1 class="video-header-title">Video Instruction</h1>
+    <div class="video-header-info">
+      <span class="video-header-label">VIDEO INSTRUCTION</span>
+      <h1 class="video-header-title"><%= @device.name %></h1>
+    </div>
     <%# Share icon — uses Web Share API if available, otherwise copies URL %>
     <button class="video-share-btn" id="shareBtn" aria-label="Share">
       <i class="fa-solid fa-share-nodes"></i>
