@@ -64,15 +64,26 @@
   }
 }
 
-/* Recently Added marquee */
+/* Recently Added — horizontal scroll (swipe when more devices than fit) */
 .explore-marquee-outer {
-  overflow-x: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .explore-marquee-inner {
   display: flex;
+  flex-wrap: nowrap;
   gap: 12px;
+  width: max-content;
+  min-width: 100%;
 }
 
 .explore-device-card {
