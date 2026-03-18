@@ -26,12 +26,12 @@ main:has(.video-page) {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: white;
+  background: #F6F8F8;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px 20px 14px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .video-back-link {
@@ -43,11 +43,28 @@ main:has(.video-page) {
   &:hover { color: #4ECDC4; }
 }
 
+.video-header-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.video-header-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #4ECDC4;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
 .video-header-title {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
   color: #1a1a2e;
   margin: 0;
+  line-height: 1.2;
 }
 
 .video-share-btn {
