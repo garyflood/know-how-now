@@ -26,7 +26,7 @@ main:has(.video-page) {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #F6F8F8;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -320,21 +320,17 @@ main:has(.video-page) {
    Creator Submission — video upload form
    ═══════════════════════════════════════════════════════════════ */
 
-body:has(.upload-page) {
-  background: #f4f4f4;
-}
-
+body:has(.upload-page),
 main:has(.upload-page) {
+  background: white;
   padding-left: 0;
   padding-right: 0;
 }
 
 .upload-page {
   width: 100%;
-  max-width: 480px;
   min-height: var(--app-content-height);
-  margin: 0 auto;
-  background: #f4f4f4;
+  background: white;
   font-family: "Space Grotesk", sans-serif;
 }
 
@@ -347,8 +343,10 @@ main:has(.upload-page) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 20px 16px;
-  background: #f4f4f4;
+  padding: 20px 20px 14px;
+  margin-bottom: 8px;
+  background: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .upload-back-link {

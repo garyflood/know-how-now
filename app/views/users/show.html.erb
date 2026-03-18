@@ -1,9 +1,11 @@
 <%# Profile page — matches Know-How UI design %>
 <div class="profile-page">
 
-  <%# Header: title only %>
-  <div class="profile-header" style="justify-content: center;">
-    <h1 class="profile-header-title" style="flex: none;">Profile</h1>
+  <%# Header: title only — hidden spacers maintain same height as headers with back button %>
+  <div class="profile-header">
+    <span class="profile-header-link" style="visibility: hidden;"><i class="fa-solid fa-arrow-left"></i></span>
+    <h1 class="profile-header-title">Profile</h1>
+    <span class="profile-header-link" style="visibility: hidden;"><i class="fa-solid fa-arrow-left"></i></span>
   </div>
 
   <%# Avatar & user info %>
