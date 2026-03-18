@@ -2,8 +2,11 @@
 <div class="auth-page">
   <div class="auth-card">
 
-    <%# Header %>
+    <%# Header with back arrow %>
     <div class="auth-header">
+      <%= link_to new_user_session_path, class: "auth-back-link" do %>
+        <i class="fa-solid fa-arrow-left"></i>
+      <% end %>
       <h1 class="auth-header-title">Create Account</h1>
     </div>
 
