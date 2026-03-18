@@ -1,12 +1,9 @@
 <%# Profile page — matches Know-How UI design %>
 <div class="profile-page">
 
-  <%# Header: back arrow — always go to Explore or Scanner (replace), never step through other history %>
+  <%# Spacer — invisible placeholder preserves exact height of removed back button header %>
   <div class="profile-header">
-    <% profile_back_url = params[:from] == "explore" ? explore_path : root_path %>
-    <a href="#" class="profile-header-link" data-back-fallback="<%= profile_back_url %>" onclick="window.location.replace(this.dataset.backFallback); return false;" aria-label="Go back">
-      <i class="fa-solid fa-arrow-left"></i>
-    </a>
+    <span class="profile-header-link" style="visibility: hidden;"><i class="fa-solid fa-arrow-left"></i></span>
   </div>
 
   <%# Avatar & user info %>
