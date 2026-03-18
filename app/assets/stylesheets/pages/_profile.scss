@@ -23,12 +23,13 @@ body:has(.profile-page) {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: white;
+  background: #F6F8F8;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 0 16px;
-  margin-bottom: 8px;
+  padding: 20px 24px 14px;
+  margin: 0 -24px 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .profile-header-link {
@@ -44,6 +45,8 @@ body:has(.profile-page) {
 }
 
 .profile-header-title {
+  flex: 1;
+  text-align: center;
   font-size: 18px;
   font-weight: 800;
   color: #1a1a2e;
@@ -646,11 +649,12 @@ body:has(.contributor-page) {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: white;
+  background: #F6F8F8;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 20px 12px;
+  padding: 20px 20px 14px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .contributor-back-link {

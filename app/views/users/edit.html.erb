@@ -1,11 +1,13 @@
 <%# Edit Profile page — matches Know-How UI design %>
 <div class="profile-page">
 
-  <%# Header: back — history.back() so returning from Profile goes to Profile; replace(profile) when no history %>
+  <%# Header: back arrow + title + spacer %>
   <div class="profile-header">
     <a href="#" class="profile-header-link" data-back-fallback="<%= profile_path %>" onclick="if (window.history.length > 1) { history.back(); } else { window.location.replace(this.dataset.backFallback); } return false;" aria-label="Go back">
       <i class="fa-solid fa-arrow-left"></i>
     </a>
+    <h1 class="profile-header-title">Edit Profile</h1>
+    <span class="profile-header-link" style="visibility: hidden;"><i class="fa-solid fa-arrow-left"></i></span>
   </div>
 
   <%= form_with model: @user, url: profile_path, method: :patch, multipart: true, class: "edit-profile-form" do |f| %>

@@ -19,6 +19,40 @@
   margin-bottom: 12px;
 }
 
+/* Sub-page header variant — back arrow + centered title + spacer */
+.explore-header--nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 14px;
+  background: #F6F8F8;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  margin-bottom: 8px;
+}
+
+.explore-nav-back {
+  color: #1a1a2e;
+  font-size: 20px;
+  text-decoration: none;
+  width: 32px;
+  text-align: center;
+
+  &:hover {
+    color: #4ECDC4;
+  }
+}
+
+.explore-nav-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.explore-nav-spacer {
+  width: 32px;
+}
+
 .explore-search-group {
   border-radius: 999px;
   overflow: hidden;

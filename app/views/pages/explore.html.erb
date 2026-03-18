@@ -1,7 +1,11 @@
 <%# Explore page — recently added devices marquee, popular guides %>
 <div class="explore-page">
-  <header class="explore-header">
-    <h1 class="explore-title">Explore</h1>
+  <header class="explore-header explore-header--nav">
+    <a href="#" onclick="history.back(); return false;" class="explore-nav-back" aria-label="Go back">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <h1 class="explore-nav-title">Explore</h1>
+    <span class="explore-nav-spacer"></span>
   </header>
 
   <%# Recently Added Devices — horizontal scroll (swipe when more than fit on screen) %>
