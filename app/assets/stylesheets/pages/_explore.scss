@@ -64,10 +64,13 @@
   }
 }
 
-/* Recently Added marquee */
+/* Recently Added — native horizontal scroll */
 .explore-marquee-outer {
-  overflow-x: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   padding-bottom: 4px;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 }
 
 .explore-marquee-inner {

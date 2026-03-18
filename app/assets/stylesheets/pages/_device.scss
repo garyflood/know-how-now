@@ -378,11 +378,13 @@ main:has(.device-page) {
   }
 }
 
-/* Carousel outer — clips the moving inner track. Scrolled via JS for marquee effect. */
+/* Carousel outer — native horizontal scroll; touch swipe works automatically */
 .device-related-scroll {
-  overflow-x: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   padding-bottom: 4px;
-  cursor: grab;
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 }
 
 /* Inner track — flex row, width grows with cards; JS scrolls parent horizontally */
