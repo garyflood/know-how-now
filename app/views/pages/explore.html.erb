@@ -14,8 +14,8 @@
     </div>
 
     <% if @recent_devices.any? %>
-      <div class="explore-marquee-outer" id="recentlyAddedOuter">
-        <div class="explore-marquee-inner" id="recentlyAddedInner">
+      <div class="explore-marquee-outer">
+        <div class="explore-marquee-inner">
           <% @recent_devices.each do |device| %>
             <%= link_to device_path(device), class: "explore-device-card" do %>
               <div class="explore-device-image">

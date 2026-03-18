@@ -76,8 +76,9 @@
         SPECIFY MODEL/SELECT A DIFFERENT MODEL
       </p>
 
-      <div class="device-related-scroll" id="carouselOuter">
-        <div class="device-carousel-inner" id="carouselInner">
+      <%# Horizontal scroll container — swipe to start/end, no auto-scroll %>
+      <div class="device-related-scroll">
+        <div class="device-related-inner">
 
           <%# Current device card — highlighted as selected; click stays on same device page %>
           <%= link_to device_path(@device), class: "device-related-card device-related-card--active" do %>
