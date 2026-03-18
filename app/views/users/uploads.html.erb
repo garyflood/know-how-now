@@ -65,25 +65,26 @@
     <% end %>
   </div>
 
-  <%# Floating upload button %>
-  <%= link_to new_user_video_path(current_user), class: "uploads-fab" do %>
-    <i class="fa-solid fa-plus"></i>
-  <% end %>
 
 </div>
 
 <%# Client-side search filter %>
 <script>
-  const searchInput = document.getElementById("uploadsSearch");
-  const list = document.getElementById("uploadsList");
+  function initUploadsSearch() {
+    const searchInput = document.getElementById("uploadsSearch");
+    const list = document.getElementById("uploadsList");
 
-  if (searchInput && list) {
-    searchInput.addEventListener("input", function () {
-      const query = this.value.toLowerCase().trim();
-      list.querySelectorAll(".uploads-card").forEach(function (card) {
-        const title = card.dataset.title || "";
-        card.style.display = title.includes(query) ? "" : "none";
+    if (searchInput && list) {
+      searchInput.addEventListener("input", function () {
+        const query = this.value.toLowerCase().trim();
+        list.querySelectorAll(".uploads-card").forEach(function (card) {
+          const title = card.dataset.title || "";
+          card.style.display = title.includes(query) ? "" : "none";
+        });
       });
-    });
+    }
   }
+
+  document.addEventListener("turbo:load", initUploadsSearch);
+  document.addEventListener("DOMContentLoaded", initUploadsSearch);
 </script>
