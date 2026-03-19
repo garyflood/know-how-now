@@ -10,7 +10,7 @@ class Video < ApplicationRecord
   validates :device_id, uniqueness: { message: "already has a video" }
 
   def self.upload_video_to_cloudinary(uploaded_video)
-    source = uploaded_video.is_a?(String) ? uploaded_video : StringIO.new(uploaded_video.read)
+    source = uploaded_video.is_a?(String) ? uploaded_video : uploaded_video.tempfile.path
     result = ::Cloudinary::Uploader.upload(source, folder: "know-how-now/videos", resource_type: "video")
     result["secure_url"]
   rescue StandardError => e
