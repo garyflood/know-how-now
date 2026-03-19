@@ -50,7 +50,7 @@ class Device < ApplicationRecord
   end
 
   def self.upload_image_to_cloudinary(uploaded_image)
-    source = uploaded_image.is_a?(String) ? uploaded_image : StringIO.new(uploaded_image.read)
+    source = uploaded_image.is_a?(String) ? uploaded_image : uploaded_image.tempfile.path
     result = ::Cloudinary::Uploader.upload(source, folder: "know-how-now/devices", resource_type: "image")
     result["secure_url"]
   rescue StandardError => e
